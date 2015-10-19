@@ -1,0 +1,3926 @@
+#AND2_X1
+@A1
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&AG(INV_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_2
+&CW(X, ng_1.A)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(nw_1, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+@A2
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&AG(INV_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_2
+&CW(X, ng_1.A)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(nw_1, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+@ZN
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&AG(INV_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_2
+&CW(X, ng_1.A)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(nw_1, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+
+
+#AND3_X1
+@A1
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(AND4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&AG(INV_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(AND4_X1) : ng_2
+&CW(X, ng_1.A)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.A4)
+&CW(old.ZN, ng_2.ZN)
+
+@A2
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(AND4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&AG(INV_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(AND4_X1) : ng_2
+&CW(X, ng_1.A)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.A4)
+&CW(old.ZN, ng_2.ZN)
+
+@A3
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(AND4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&AG(INV_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(AND4_X1) : ng_2
+&CW(X, ng_1.A)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.A4)
+&CW(old.ZN, ng_2.ZN)
+
+@ZN
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(AND4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&AG(INV_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(AND4_X1) : ng_2
+&CW(X, ng_1.A)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.A4)
+&CW(old.ZN, ng_2.ZN)
+
+
+
+#AND4_X1
+@A1
+$0 -> 0
+&AG(AND3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_2
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+$1 -> 0
+&AG(AND3_X1) : ng_1
+&AW() : nw_1
+&AW() : nw_2
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_2
+&AG(INV_X1) : ng_3
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(nw_2, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+@A2
+$0 -> 0
+&AG(AND3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_2
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+$1 -> 0
+&AG(AND3_X1) : ng_1
+&AW() : nw_1
+&AW() : nw_2
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_2
+&AG(INV_X1) : ng_3
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(nw_2, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+@A3
+$0 -> 0
+&AG(AND3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_2
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+$1 -> 0
+&AG(AND3_X1) : ng_1
+&AW() : nw_1
+&AW() : nw_2
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_2
+&AG(INV_X1) : ng_3
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(nw_2, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+@A4
+$0 -> 0
+&AG(AND3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_2
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+$1 -> 0
+&AG(AND3_X1) : ng_1
+&AW() : nw_1
+&AW() : nw_2
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_2
+&AG(INV_X1) : ng_3
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(nw_2, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+@ZN
+$0 -> 0
+&AG(AND3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_2
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+$1 -> 0
+&AG(AND3_X1) : ng_1
+&AW() : nw_1
+&AW() : nw_2
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(AND3_X1) : ng_2
+&AG(INV_X1) : ng_3
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(nw_2, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+
+
+#AOI211_X1
+@A
+$0 -> 0
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&CW(old.B, ng_1.A)
+&CW(old.A, ng_1.B1)
+&CW(X, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&AG(INV_X1) : ng_2
+&AW() : nw_1
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.B, ng_1.A)
+&CW(old.A, ng_1.B1)
+&CW(nw_1, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@B
+$0 -> 0
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&CW(old.A, ng_1.A)
+&CW(old.B, ng_1.B1)
+&CW(X, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&AG(INV_X1) : ng_2
+&AW() : nw_1
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(old.B, ng_1.B1)
+&CW(nw_1, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@C1
+$0 -> 0
+&AG(AND3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_2
+&CW(old.C1, ng_1.A1)
+&CW(old.C2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A, ng_2.A1)
+&CW(old.B, ng_2.A2)
+&CW(nw_1, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+$1 -> 0
+&AG(AND3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(old.C1, ng_1.A1)
+&CW(old.C2, ng_1.A2)
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(nw_2, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A, ng_2.A1)
+&CW(old.B, ng_2.A2)
+&CW(nw_1, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+@C2
+$0 -> 0
+&AG(AND3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_2
+&CW(old.C1, ng_1.A1)
+&CW(old.C2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A, ng_2.A1)
+&CW(old.B, ng_2.A2)
+&CW(nw_1, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+$1 -> 0
+&AG(AND3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(old.C1, ng_1.A1)
+&CW(old.C2, ng_1.A2)
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(nw_2, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A, ng_2.A1)
+&CW(old.B, ng_2.A2)
+&CW(nw_1, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+
+
+#AOI21_X1
+@ZN
+$1 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI211_X1) : ng_1
+&CW(old.A, ng_1.A)
+&CW(X, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI211_X1) : ng_1
+&AG(INV_X1) : ng_2
+&AW() : nw_1
+&CW(old.A, ng_1.A)
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@A
+$0 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI22_X1) : ng_1
+&CW(old.A, ng_1.A1)
+&CW(X, ng_1.A2)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI22_X1) : ng_1
+&AG(INV_X1) : ng_2
+&AW() : nw_1
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI211_X1) : ng_1
+&CW(old.A, ng_1.A)
+&CW(X, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI211_X1) : ng_1
+&AG(INV_X1) : ng_2
+&AW() : nw_1
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@B1
+$0 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR2_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR2_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(old.ZN, ng_1.ZN)
+
+@B2
+$0 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR2_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR2_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#AOI221_X1
+@A
+$0 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI222_X1) : ng_1
+&CW(old.A, ng_1.A1)
+&CW(X, ng_1.A2)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI222_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@B1
+$0 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI211_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI211_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@B2
+$0 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI211_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI211_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@C1
+$0 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI211_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI211_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@C2
+$0 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI211_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI211_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#AOI222_X1
+@A1
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@A2
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@B1
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@B2
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@C1
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@C2
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#AOI22_X1
+@ZN
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&CW(X, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI221_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@A1
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI21_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI21_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+@A2
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI21_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI21_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+@B1
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI21_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI21_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+@B2
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI21_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(AOI21_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#BUF_X1
+
+
+#INV_X1
+@ZN
+$0 -> 1
+&DW(old.A)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND2_X1) : ng_1
+&CW(old.A, ng_1.A1)
+&CW(X, ng_1.A2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR2_X1) : ng_1
+&CW(old.A, ng_1.A1)
+&CW(X, ng_1.A2)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#MUX2_X1
+
+
+#NAND2_X1
+@ZN
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(nw_1, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+@A1
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(nw_1, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+@A2
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(nw_1, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#NAND3_X1
+@ZN
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND4_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+@A1
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND4_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+@A2
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND4_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+@A3
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND4_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#NAND4_X1
+@ZN
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(nw_2, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+@A1
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(nw_2, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+@A2
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(nw_2, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+@A3
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(nw_2, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+@A4
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_1
+&AW() : nw_1
+&AG(AND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(nw_2, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#NOR2_X1
+@ZN
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(nw_1, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+@A1
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(nw_1, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+@A2
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(nw_1, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#NOR3_X1
+@ZN
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR4_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+@A1
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR4_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+@A2
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR4_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+@A3
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR4_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#NOR4_X1
+@ZN
+$1 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 0
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(nw_2, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+@A1
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(nw_2, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+@A2
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(nw_2, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+@A3
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(nw_2, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+@A4
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(NOR3_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A4, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(nw_2, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#OAI211_X1
+A
+$1 -> 1
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&CW(old.B, ng_1.A)
+&CW(old.A, ng_1.B1)
+&CW(X, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&AG(INV_X1) : ng_2
+&AW() : nw_1
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.B, ng_1.A)
+&CW(old.A, ng_1.B1)
+&CW(nw_1, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@B
+$1 -> 1
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&CW(old.A, ng_1.A)
+&CW(old.B, ng_1.B1)
+&CW(X, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&AG(INV_X1) : ng_2
+&AW() : nw_1
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(old.B, ng_1.B1)
+&CW(nw_1, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@C1
+$1 -> 1
+&AG(OR3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_2
+&CW(old.C1, ng_1.A1)
+&CW(old.C2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A, ng_2.A1)
+&CW(old.B, ng_2.A2)
+&CW(nw_1, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+$0 -> 1
+&AG(OR3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(old.C1, ng_1.A1)
+&CW(old.C2, ng_1.A2)
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(nw_2, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A, ng_2.A1)
+&CW(old.B, ng_2.A2)
+&CW(nw_1, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+@C2
+$1 -> 1
+&AG(OR3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_2
+&CW(old.C1, ng_1.A1)
+&CW(old.C2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A, ng_2.A1)
+&CW(old.B, ng_2.A2)
+&CW(nw_1, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+$0 -> 1
+&AG(OR3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A)
+&DW(old.B)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(old.C1, ng_1.A1)
+&CW(old.C2, ng_1.A2)
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(nw_2, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A, ng_2.A1)
+&CW(old.B, ng_2.A2)
+&CW(nw_1, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+
+
+#OAI21_X1
+@ZN
+$0 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI211_X1) : ng_1
+&CW(old.A, ng_1.A)
+&CW(X, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI211_X1) : ng_1
+&AG(INV_X1) : ng_2
+&AW() : nw_1
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@A
+$1 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI22_X1) : ng_1
+&CW(old.A, ng_1.A1)
+&CW(X, ng_1.A2)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI22_X1) : ng_1
+&AG(INV_X1) : ng_2
+&AW() : nw_1
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI211_X1) : ng_1
+&CW(old.A, ng_1.A)
+&CW(X, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 0
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI211_X1) : ng_1
+&AG(INV_X1) : ng_2
+&AW() : nw_1
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@B1
+$1 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND2_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND2_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(old.ZN, ng_1.ZN)
+
+@B2
+$1 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND2_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(NAND2_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#OAI221_X1
+@A
+$1 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI222_X1) : ng_1
+&CW(old.A, ng_1.A1)
+&CW(X, ng_1.A2)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI222_X1) : ng_1
+&AW() : nw_1
+&AG(INV_X1) : ng_2
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A1)
+&CW(nw_1, ng_1.A2)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@B1
+$1 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI211_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI211_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@B2
+$1 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI211_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI211_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@C1
+$1 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI211_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI211_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@C2
+$1 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI211_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI211_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(old.A, ng_1.A)
+&CW(nw_1, ng_1.B)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#OAI222_X1
+@A1
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@A2
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@B1
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@B2
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.C1, ng_1.C1)
+&CW(old.C2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@C1
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@C2
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.C1)
+&DW(old.C2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.C1, ng_2.A1)
+&CW(old.C2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#OAI22_X1
+@ZN
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&CW(X, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI221_X1) : ng_1
+&AG(INV_X1) : ng_2
+&AW() : nw_1
+&CW(X, ng_2.A)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.B1, ng_1.C1)
+&CW(old.B2, ng_1.C2)
+&CW(old.ZN, ng_1.ZN)
+
+@A1
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI21_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI21_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+@A2
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI21_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI21_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.B1, ng_1.B1)
+&CW(old.B2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+@B1
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI21_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI21_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+@B2
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI21_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.B1)
+&DW(old.B2)
+&DW(old.ZN)
+&RG(old)
+&AG(OAI21_X1) : ng_1
+&AW() : nw_1
+&AG(OR3_X1) : ng_2
+&AW() : nw_2
+&AG(INV_X1) : ng_3
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(old.B1, ng_2.A1)
+&CW(old.B2, ng_2.A2)
+&CW(nw_2, ng_2.A3)
+&CW(nw_1, ng_2.ZN)
+&CW(nw_1, ng_1.A)
+&CW(old.A1, ng_1.B1)
+&CW(old.A2, ng_1.B2)
+&CW(old.ZN, ng_1.ZN)
+
+
+
+#OAI33_X1
+
+
+#OR2_X1
+@ZN
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&AG(INV_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_2
+&CW(X, ng_1.A)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(nw_1, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+@A1
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&AG(INV_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_2
+&CW(X, ng_1.A)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(nw_1, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+@A2
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(X, ng_1.A3)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&AG(INV_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_2
+&CW(X, ng_1.A)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(nw_1, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+
+
+#OR3_X1
+@ZN
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(OR4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&AG(INV_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(OR4_X1) : ng_2
+&CW(X, ng_1.A)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.A4)
+&CW(old.ZN, ng_2.ZN)
+
+@A1
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(OR4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&AG(INV_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(OR4_X1) : ng_2
+&CW(X, ng_1.A)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.A4)
+&CW(old.ZN, ng_2.ZN)
+
+@A2
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(OR4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&AG(INV_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(OR4_X1) : ng_2
+&CW(X, ng_1.A)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.A4)
+&CW(old.ZN, ng_2.ZN)
+
+@A3
+$1 -> 1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(OR4_X1) : ng_1
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(X, ng_1.A4)
+&CW(old.ZN, ng_1.ZN)
+
+$0 -> 1
+&AG(INV_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.ZN)
+&RG(old)
+&AG(OR4_X1) : ng_2
+&CW(X, ng_1.A)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A1, ng_2.A1)
+&CW(old.A2, ng_2.A2)
+&CW(old.A3, ng_2.A3)
+&CW(nw_1, ng_2.A4)
+&CW(old.ZN, ng_2.ZN)
+
+
+
+#OR4_X1
+@ZN
+$1 -> 1
+&AG(OR3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_2
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+$0 -> 1
+&AG(OR3_X1) : ng_1
+&AW() : nw_1
+&AW() : nw_2
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_2
+&AG(INV_X1) : ng_3
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(nw_2, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+@A1
+$1 -> 1
+&AG(OR3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_2
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+$0 -> 1
+&AG(OR3_X1) : ng_1
+&AW() : nw_1
+&AW() : nw_2
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_2
+&AG(INV_X1) : ng_3
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(nw_2, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+@A2
+$1 -> 1
+&AG(OR3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_2
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+$0 -> 1
+&AG(OR3_X1) : ng_1
+&AW() : nw_1
+&AW() : nw_2
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_2
+&AG(INV_X1) : ng_3
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(nw_2, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+@A3
+$1 -> 1
+&AG(OR3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_2
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+$0 -> 1
+&AG(OR3_X1) : ng_1
+&AW() : nw_1
+&AW() : nw_2
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_2
+&AG(INV_X1) : ng_3
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(nw_2, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+@A4
+$1 -> 1
+&AG(OR3_X1) : ng_1
+&AW() : nw_1
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_2
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+$0 -> 1
+&AG(OR3_X1) : ng_1
+&AW() : nw_1
+&AW() : nw_2
+&DW(old.A1)
+&DW(old.A2)
+&DW(old.A3)
+&DW(old.A4)
+&DW(old.ZN)
+&RG(old)
+&AG(OR3_X1) : ng_2
+&AG(INV_X1) : ng_3
+&CW(old.A1, ng_1.A1)
+&CW(old.A2, ng_1.A2)
+&CW(old.A3, ng_1.A3)
+&CW(nw_1, ng_1.ZN)
+&CW(old.A4, ng_2.A1)
+&CW(nw_1, ng_2.A2)
+&CW(X, ng_3.A)
+&CW(nw_2, ng_3.ZN)
+&CW(nw_2, ng_2.A3)
+&CW(old.ZN, ng_2.ZN)
+
+
+
+#XNOR2_X1
+
+
+#XOR2_X1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
