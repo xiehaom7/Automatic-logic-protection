@@ -59,15 +59,15 @@ public:
 	int				get_fanout_num()	const;
 
 public:
-	bool			set_net_name(string new_sNetName);
-	bool			set_upper_module(module* const p_module);
-	bool			set_fanin_node(node* const p_node);
-	bool			add_fanout_node(node* const p_node);
-	bool			remove_fanout_node(node* const p_node);
-	bool			set_is_input(bool new_fInput);
-	bool			set_is_output(bool new_fOutput);
-	bool			set_mark(bool new_fMark);
-	bool			set_ifunc(int new_value);
+	net&			set_net_name(string new_sNetName);
+	net&			set_upper_module(module* const p_module);
+	net&			set_fanin_node(node* const p_node);
+	net&			add_fanout_node(node* const p_node);
+	net&			remove_fanout_node(node* const p_node);
+	net&			set_is_input(bool new_fInput);
+	net&			set_is_output(bool new_fOutput);
+	net&			set_mark(bool new_fMark);
+	net&			set_ifunc(int new_value);
 };
 
 inline	string			net::get_net_name()		const { return sNetName; }
@@ -81,13 +81,13 @@ inline	int				net::get_id()			const { return id; }
 inline	int				net::get_ifunc()		const { return iFunc; }
 inline	int				net::get_fanout_num()	const { return iFanoutNum; }
 
-inline	bool			net::set_net_name(string new_sNetName) { sNetName = new_sNetName; return true; }
-inline	bool			net::set_upper_module(module* const p_module) { pUpperModule = p_module; return true; }
-inline	bool			net::set_fanin_node(node* const p_node) { pFanin = p_node; return true; }
-inline	bool			net::add_fanout_node(node* const p_node) { assert(p_node != NULL); vFanouts.push_back(p_node); iFanoutNum++; return true; }
-inline	bool			net::set_is_input(bool new_fInput) { fInput = new_fInput; return true; }
-inline	bool			net::set_is_output(bool new_fOutput) { fOutput = new_fOutput; return true; }
-inline	bool			net::set_mark(bool new_fMark) { fMark = new_fMark; return true; }
-inline	bool			net::set_ifunc(int new_value) { iFunc = new_value; return true; }
+inline	net&			net::set_net_name(string new_sNetName) { sNetName = new_sNetName; return *this; }
+inline	net&			net::set_upper_module(module* const p_module) { pUpperModule = p_module; return *this; }
+inline	net&			net::set_fanin_node(node* const p_node) { pFanin = p_node; return *this; }
+inline	net&			net::add_fanout_node(node* const p_node) { assert(p_node != NULL); vFanouts.push_back(p_node); iFanoutNum++; return *this; }
+inline	net&			net::set_is_input(bool new_fInput) { fInput = new_fInput; return *this; }
+inline	net&			net::set_is_output(bool new_fOutput) { fOutput = new_fOutput; return *this; }
+inline	net&			net::set_mark(bool new_fMark) { fMark = new_fMark; return *this; }
+inline	net&			net::set_ifunc(int new_value) { iFunc = new_value; return *this; }
 
 #endif

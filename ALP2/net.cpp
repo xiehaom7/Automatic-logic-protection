@@ -51,14 +51,13 @@ net::~net() {
 
 }
 
-bool net::remove_fanout_node(node* const p_node) {
+net& net::remove_fanout_node(node* const p_node) {
 	assert(p_node != NULL);
 	for (vector<node*>::iterator ite = vFanouts.begin(); ite != vFanouts.end(); ite++) {
 		if ((*ite) == p_node) {
 			vFanouts.erase(ite);
 			iFanoutNum--;
-			return true;
 		}
 	}
-	return false;
+	return *this;
 }
