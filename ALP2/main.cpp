@@ -1,5 +1,5 @@
 #include "cell.h"
-#include "module.h"
+#include "design.h"
 #include <fstream>
 #include <map>
 
@@ -14,12 +14,11 @@ int main() {
 
 	ifstream pFile("D:\\Dropbox\\Public\\Programs\\C\\ALP\\ALP\\cmb.v");
 	stringstream ss;
-	map<string, module*> mm;
 	assert(pFile.is_open());
 	ss << pFile.rdbuf();
-	module m(&cl);
-	m.read_module(ss.str(), mm, cl.map_cell);
-	cout << m.check_module();
+	design d(&cl);
+	d.parse_design_file(ss);
+	cout << d.output_design_file();
 
 	return 0;
 }

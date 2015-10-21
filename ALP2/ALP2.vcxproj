@@ -145,6 +145,7 @@
     <ClInclude Include="cell.h" />
     <ClInclude Include="cell_utility.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="design.h" />
     <ClInclude Include="module.h" />
     <ClInclude Include="net.h" />
     <ClInclude Include="node.h" />
@@ -153,6 +154,7 @@
   <ItemGroup>
     <ClCompile Include="cell.cpp" />
     <ClCompile Include="cell_utility.cpp" />
+    <ClCompile Include="design.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="module.cpp" />
     <ClCompile Include="net.cpp" />
