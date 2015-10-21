@@ -6,6 +6,13 @@
 #include "string_utility.cpp"
 #include "cell.h"
 #include "cell.cpp"
+#include "module.h"
+#include "module.cpp"
+#include "net.h"
+#include "net.cpp"
+#include "node.h"
+#include "node.cpp"
+#include <map>
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace ALP2_TEST
@@ -377,6 +384,38 @@ namespace ALP2_TEST
 			p_cell = cl.find_cell("BUF_X1");
 			Assert::IsNotNull(p_cell, L"BUF_X1 not found.");
 			Assert::AreEqual((size_t)0, p_cell->rw_op_collection.size(), L"BUF_X1 rw_op_collection size not match");
+		}
+	};
+	TEST_CLASS(module_test) {
+	public:
+		TEST_METHOD(test_module) {
+			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n#OR2_X1\nA1 A2\nZN\n1000 0100\n0011");
+			cell_library*	cl;
+			cl = new cell_library("test_lib");
+			cl->parse_cc_file(ss);
+			string s_module = "module test (i_0, i_1, i_2, o_0, o_1);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0, o_1;\n"
+				"wire w_0, w_1;\n\n"
+				"AND2_X1 U1 (.A1(i_0), .A2(i_1), .ZN(w_0) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(i_2), .ZN(o_0) );\n"
+				"OR2_X1 U3 (.A1(i_0), .A2(i_1), .ZN(w_1) );\n"
+				"OR2_X1 U4 (.A1(w_1), .A2(i_2), .ZN(o_1) );\n"
+				"endmodule\n";
+			module m(cl);
+			map<string, module*> mm;
+			m.read_module(s_module, mm, cl->map_cell);
+
+			Assert::AreEqual(string("test"), m.get_module_name(), L"module name not match");
+			Assert::AreEqual(7, m.get_net_num(), L"net number not match");
+			Assert::AreEqual(4, m.get_node_num(), L"node number not match");
+			Assert::AreEqual(3, m.get_input_num(), L"input number not match");
+			Assert::AreEqual(2, m.get_output_num(), L"output number not match");
+			Assert::AreEqual(1, m.get_input_pos("i_1"), L"get_input_pos not match");
+			Assert::AreEqual(1, m.get_output_pos("o_1"), L"get_output_pos not match");
+			Assert::AreEqual(s_module, m.write_module(), L"write_module not match");
+			Assert::AreEqual(true, m.check_module(), L"check_module not match");
+			delete cl;
 		}
 	};
 }
