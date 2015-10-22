@@ -28,15 +28,6 @@ typedef struct {
 	Record_info				op_info;
 }Record;
 
-typedef struct {
-	unsigned				uLogicOne;
-	unsigned				uLogicZero;
-	unsigned				uInjection;
-	unsigned				uPropagation;
-	unsigned				uSimulation;
-	unsigned				uAffection;
-}StatNode;
-
 class module {
 private:
 	string					sModuleName;
@@ -60,7 +51,6 @@ private:
 	list<Record>			lRecordLst;
 
 	queue<int>				qRecycleBin;
-
 
 public:
 	module(cell_library*	cl);
@@ -130,6 +120,7 @@ public:
 	int			get_input_pos(string pin_name) const;
 	int			get_output_pos(string pin_name) const;
 	int			get_ifunc() const;
+	bool		get_topological_sequence(vector<string> &v);
 
 private:
 	string		_generate_wire_list(vector<net*> v, bool &first_item, string &delimiter, 

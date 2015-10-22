@@ -862,57 +862,60 @@ module&	module::reset_net_fmark() {
 }
 
 bool	module::check_module() {
-	queue<net*> net_queue;
-	vector<net*> verified_net_vector;
-	int current_net_fanout_num;
-	int node_output_num;
-	net* temp_net;
-	net* current_net;
-	node* current_fanout_node;
-	int i, j;
+	vector<string> verified_net_vector;
 	int iDanglingNet;
 
-	reset_node_ifunc();
-	reset_net_fmark();
-	for (i = 0; i < iInputNum; i++) {
-		temp_net = get_input_net(i);
-		net_queue.push(temp_net);
-		verified_net_vector.push_back(temp_net);
-		temp_net->set_mark(true);
-	}
-	while (!net_queue.empty()) {
-		current_net = net_queue.front();
-		net_queue.pop();
-
-		current_net_fanout_num = current_net->get_fanout_num();
-		for (i = 0; i < current_net_fanout_num; i++) {
-			current_fanout_node = current_net->get_fanout_nodes(i);
-			current_fanout_node->set_ifunc(current_fanout_node->get_ifunc() + 1);
-			if (current_fanout_node->get_ifunc() == current_fanout_node->get_input_num()) {
-				node_output_num = current_fanout_node->get_output_num();
-				for (j = 0; j < node_output_num; j++) {
-					temp_net = current_fanout_node->get_output_net(j);
-					if (!temp_net->get_mark()) {
-						net_queue.push(temp_net);
-						verified_net_vector.push_back(temp_net);
-						temp_net->set_mark(true);
-					}
-					else {
-						return false;
-					}
-				}
-				if (current_fanout_node->get_node_type() == TYPE_MODULE) {
-					if (!current_fanout_node->get_module_ref()->check_module()) 
-						return false;
-				}
-			}
-		}
-	}
+	if (!get_topological_sequence(verified_net_vector))
+		return false;
 	iDanglingNet = 0;
 	for (vector<net*>::const_iterator ite = vNetLst.cbegin(); ite != vNetLst.cend(); ite++)
 		if ((*ite)->get_fanin_node() == NULL && (*ite)->get_is_input() == false)
 			iDanglingNet++;
 	if (verified_net_vector.size() != iNetNum - iDanglingNet)
 		return false;
+	return true;
+}
+
+bool	module::get_topological_sequence(vector<string> &v) {
+	int i, j;
+	int current_net_fanout_num;
+	int node_output_num;
+	net* temp_net;
+	net* current_net;
+	node* current_fanout_node;
+	queue<net*> net_queue;
+	vector<net*>::iterator net_ite;
+
+	reset_node_ifunc();
+	reset_net_fmark();
+	for (net_ite = vInputLst.begin(); net_ite != vInputLst.end(); net_ite++) {
+		net_queue.push(*net_ite);
+		(*net_ite)->set_mark(true);
+	}
+	while (!net_queue.empty()) {
+		current_net = net_queue.front();
+		net_queue.pop();
+		v.push_back(current_net->get_net_name());
+
+		current_net_fanout_num = current_net->get_fanout_num();
+		for (i = 0; i < current_net_fanout_num; i++) {
+			current_fanout_node = current_net->get_fanout_nodes(i);
+			current_fanout_node->set_ifunc(current_fanout_node->get_ifunc() + 1);
+
+			if (current_fanout_node->get_ifunc() != current_fanout_node->get_input_num())
+				continue;
+
+			node_output_num = current_fanout_node->get_output_num();
+			for (j = 0; j < node_output_num; j++) {
+				temp_net = current_fanout_node->get_output_net(j);
+				if (temp_net->get_mark()) {
+					v.clear();
+					return false;
+				}
+				net_queue.push(temp_net);
+				temp_net->set_mark(true);
+			}
+		}
+	}
 	return true;
 }

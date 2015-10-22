@@ -8,3 +8,8 @@ const unsigned RW_OP_OPERAND_LENGTH = 8;
 #define RW_VALID_CHAR "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_"
 #define RW_VALID_SPACE " \n\r\t"
 #define RW_VALID_LOGIC "01"
+
+/*simulation configuration*/
+const int MAX_RAND_NUM = 32767;
+const int MAX_RAND_BIT = 15;
+const int MAX_FAULT_NUM = 512;

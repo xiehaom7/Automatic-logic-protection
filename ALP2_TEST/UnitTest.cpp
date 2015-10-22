@@ -419,6 +419,96 @@ namespace ALP2_TEST
 			Assert::AreEqual(true, m.check_module(), L"check_module not match");
 			delete cl;
 		}
+
+		TEST_METHOD(test_check_module) {
+			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
+				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
+				"#AND3_X1\nA1 A2 A3\nZN");
+			cell_library*	cl;
+			cl = new cell_library("test_lib");
+			cl->parse_cc_file(ss);
+			string s_incorrect_module = "module test (i_0, i_1, i_2, o_0, o_1);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0, o_1;\n"
+				"wire w_0, w_1;\n\n"
+				"AND3_X1 U1 (.A1(i_0), .A2(i_1), .A3(o_0), .ZN(w_0) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(i_2), .ZN(o_0) );\n"
+				"OR2_X1 U3 (.A1(i_0), .A2(i_1), .ZN(w_1) );\n"
+				"OR2_X1 U4 (.A1(w_1), .A2(i_2), .ZN(o_1) );\n"
+				"endmodule\n";
+			string s_top_module = "module top_test (i_0, i_1, i_2, o_0);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0;\n"
+				"wire w_0, w_1;\n\n"
+				"test U1 (.i_0(i_0), .i_1(i_1), .i_2(i_2), .o_0(w_0), .o_1(w_1) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(w_1), .ZN(o_0) );\n"
+				"endmodule\n";
+			module m1(cl);
+			module m2(cl);
+			map<string, module*> mm;
+			int i;
+			m1.read_module(s_incorrect_module, mm, cl->map_cell);
+			mm[m1.get_module_name()] = &m1;
+			m2.read_module(s_top_module, mm, cl->map_cell);
+
+			Assert::IsFalse(m1.check_module());
+			Assert::IsFalse(!m2.check_module());
+		}
+
+		TEST_METHOD(test_get_topological_sequence) {
+			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
+				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
+				"#AND3_X1\nA1 A2 A3\nZN");
+			cell_library*	cl;
+			cl = new cell_library("test_lib");
+			cl->parse_cc_file(ss);
+			string s_module = "module test (i_0, i_1, i_2, o_0, o_1);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0, o_1;\n"
+				"wire w_0, w_1;\n\n"
+				"AND2_X1 U1 (.A1(i_0), .A2(i_1), .ZN(w_0) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(i_2), .ZN(o_0) );\n"
+				"OR2_X1 U3 (.A1(i_0), .A2(i_1), .ZN(w_1) );\n"
+				"OR2_X1 U4 (.A1(w_1), .A2(i_2), .ZN(o_1) );\n"
+				"endmodule\n";
+			string s_incorrect_module = "module test (i_0, i_1, i_2, o_0, o_1);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0, o_1;\n"
+				"wire w_0, w_1;\n\n"
+				"AND3_X1 U1 (.A1(i_0), .A2(i_1), .A3(o_0), .ZN(w_0) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(i_2), .ZN(o_0) );\n"
+				"OR2_X1 U3 (.A1(i_0), .A2(i_1), .ZN(w_1) );\n"
+				"OR2_X1 U4 (.A1(w_1), .A2(i_2), .ZN(o_1) );\n"
+				"endmodule\n";
+			string s_top_module = "module top_test (i_0, i_1, i_2, o_0);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0;\n"
+				"wire w_0, w_1;\n\n"
+				"test U1 (.i_0(i_0), .i_1(i_1), .i_2(i_2), .o_0(w_0), .o_1(w_1) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(w_1), .ZN(o_0) );\n"
+				"endmodule\n";
+			module m1(cl);
+			module m2(cl);
+			map<string, module*> mm;
+			int i;
+			m1.read_module(s_module, mm, cl->map_cell);
+			mm[m1.get_module_name()] = &m1;
+			m2.read_module(s_top_module, mm, cl->map_cell);
+			
+			string a2[] = { "i_0", "i_1", "i_2", "w_0", "w_1", "o_0" };
+			vector<string> v2;
+			Assert::AreEqual(true, m2.get_topological_sequence(v2));
+			Assert::AreEqual((size_t)6, v2.size());
+			for (i = 0; i < 6; i++)
+				Assert::AreEqual(a2[i], v2[i]);
+
+			string a1[] = { "i_0", "i_1", "i_2", "w_0", "w_1", "o_0", "o_1" };
+			vector<string> v1;
+			Assert::AreEqual(true, m1.get_topological_sequence(v1));
+			Assert::AreEqual((size_t)7, v1.size());
+			for (i = 0; i < 7; i++)
+				Assert::AreEqual(a1[i], v1[i]);
+		}
 	};
 	TEST_CLASS(design_test) {
 		TEST_METHOD(test_design) {

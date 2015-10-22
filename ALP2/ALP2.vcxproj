@@ -149,6 +149,7 @@
     <ClInclude Include="module.h" />
     <ClInclude Include="net.h" />
     <ClInclude Include="node.h" />
+    <ClInclude Include="simulation.h" />
     <ClInclude Include="string_utility.h" />
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +160,7 @@
     <ClCompile Include="module.cpp" />
     <ClCompile Include="net.cpp" />
     <ClCompile Include="node.cpp" />
+    <ClCompile Include="simulation.cpp" />
     <ClCompile Include="string_utility.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
