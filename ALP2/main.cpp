@@ -1,5 +1,6 @@
 #include "cell.h"
 #include "design.h"
+#include "simulation.h"
 #include <fstream>
 #include <map>
 
@@ -18,7 +19,8 @@ int main() {
 	ss << pFile.rdbuf();
 	design d(&cl);
 	d.parse_design_file(ss);
-	cout << d.output_design_file();
+	simulation sim;
+	sim.construct(d.get_top_module());
 
 	return 0;
 }
