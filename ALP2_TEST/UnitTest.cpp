@@ -550,7 +550,28 @@ namespace ALP2_TEST
 	};
 
 	TEST_CLASS(simulation_test) {
-		TEST_METHOD(test_construct) {
+		TEST_METHOD(test_generate_input_vector) {
+			vector<bool> vi;
+			vector<bool> res(3, false);
+			vi.resize(3);
+
+			simulation::generate_input_vector(vi, RESET);
+			Assert::AreEqual(true, vi == res);
+
+			simulation::generate_input_vector(vi, SEQUENCE);
+			res[0] = true;
+			Assert::AreEqual(true, vi == res);
+
+			simulation::generate_input_vector(vi, SEQUENCE);
+			res[0] = false, res[1] = true;
+			Assert::AreEqual(true, vi == res);
+
+			simulation::generate_input_vector(vi, RESET);
+			res[1] = false;
+			Assert::AreEqual(true, vi == res);
+		}
+
+		TEST_METHOD(test_simulation_module) {
 			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
 				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
 				"#AND3_X1\nA1 A2 A3\nZN");
@@ -580,6 +601,8 @@ namespace ALP2_TEST
 			
 			simulation sim;
 			sim.construct(d.get_top_module());
+
+			
 		}
 	};
 }

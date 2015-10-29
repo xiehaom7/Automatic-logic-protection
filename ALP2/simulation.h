@@ -4,7 +4,7 @@
 #include "config.h"
 
 typedef enum { RANDOM, SEQUENCE, RESET } Gen_mode;
-typedef enum { SA1, SA0, FLIP } Fault_mode;
+typedef enum { SA1, SA0, FLIP, NONE } Fault_mode;
 
 typedef struct {
 	unsigned				uLogicOne;
@@ -48,7 +48,6 @@ public:
 
 private:
 	simulation& _parallel_simulate_node(SimNode* tar_node, Fault_mode fm);
-	simulation& _parallel_simulate_module(Fault_mode fm, int fault_num);
 
 public:
 	void		destroy();
@@ -56,16 +55,16 @@ public:
 	bool		construct(module* top_module);
 	void		generate_fault_list(vector<string> &prefix_list);
 	void		generate_fault_list();
-	Wire_value	simulate_single_node(SimNode* tar_node);
-	Wire_value	simulate_single_node_w_fault(SimNode* tar_node, Fault_mode fm, int fault_num);
-	void		simulate();
-	void		simulate_w_fault(Fault_mode fm, int fault_num);
-	void		simulate_w_fault_dump(Fault_mode fm, int fault_num, const string dump_file_name);
+	simulation& simulate_module(Fault_mode fm);
+	//Wire_value	simulate_single_node(SimNode* tar_node);
+	//Wire_value	simulate_single_node_w_fault(SimNode* tar_node, Fault_mode fm, int fault_num);
+	//void		simulate();
+	//void		simulate_w_fault(Fault_mode fm, int fault_num);
+	//void		simulate_w_fault_dump(Fault_mode fm, int fault_num, const string dump_file_name);
 //	simulation&	run_fault_injection_simulation(Sim_mode sm, Fault_mode fm, int sim_num, int fault_num, bool random = true);
-	simulation&	run_exhaustive_FI_simulation(Fault_mode fm);
-	simulation& run_random_golden_simulation(int sim_num);
-	simulation& run_random_FI_simulation(Fault_mode fm, int sim_num, int fault_num);
-	simulation& generate_input_vector(vector<bool> &input_vector, Gen_mode mode);
+	//simulation&	run_exhaustive_FI_simulation(Fault_mode fm);
+	//simulation& run_random_golden_simulation(int sim_num);
+	//simulation& run_random_FI_simulation(Fault_mode fm, int sim_num, int fault_num);
 	simulation&	inject_faults(int fault_num, Gen_mode mode);
 	void		display(const string& display_file);
 	string		save_info();
@@ -73,5 +72,8 @@ public:
 	bool		return_inputs(vector<Wire_value> &inputs);
 	simulation&	set_input_vector(vector<bool> &inputs);
 	simulation& set_parallel_input_vector(vector<bool> &parallel, vector<bool> &main, unsigned round);
+
+public:
+	static void generate_input_vector(vector<bool> &input_vector, Gen_mode mode);
 };
 
