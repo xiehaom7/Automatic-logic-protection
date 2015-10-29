@@ -88,6 +88,7 @@ int simulation::construct_module(const vector<int> &input_list,
 		mapSimNodeLst[prefix + "." + current_net->get_net_name()] = input_list[i];
 	}
 	for (ite = topological_node_list.cbegin(); ite != topological_node_list.cend(); ite++) {
+		input_index_list.clear();
 		current_net = tar_module->get_net(*ite);
 		if (current_net->get_is_input())
 			continue;
@@ -504,6 +505,15 @@ simulation& simulation::set_parallel_input_vector(vector<bool> &parallel, vector
 
 	for (unsigned i = 0; i < input_size; i++)
 		vSimNodeLst[vPrimaryInputLst[i]]->bsParallelVector[round] = main[i] ^ parallel[i];
+	return *this;
+}
+
+simulation& simulation::get_node_value(string name, Wire_value &value, bitset<MAX_PARALLEL_NUM> &vector) {
+	std::map<string, int>::const_iterator ite = mapSimNodeLst.find(name);
+	if (ite == mapSimNodeLst.end())
+		throw exception(("node " + name + "not found. (get_node_value)").c_str());
+	value = vSimNodeLst[ite->second]->eValue;
+	vector = vSimNodeLst[ite->second]->bsParallelVector;
 	return *this;
 }
 

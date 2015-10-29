@@ -72,6 +72,7 @@ public:
 	bool		return_inputs(vector<Wire_value> &inputs);
 	simulation&	set_input_vector(vector<bool> &inputs);
 	simulation& set_parallel_input_vector(vector<bool> &parallel, vector<bool> &main, unsigned round);
+	simulation& get_node_value(string name, Wire_value &value, bitset<MAX_PARALLEL_NUM> &vector);
 
 public:
 	static void generate_input_vector(vector<bool> &input_vector, Gen_mode mode);

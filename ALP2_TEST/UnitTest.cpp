@@ -448,7 +448,6 @@ namespace ALP2_TEST
 			module m1(cl);
 			module m2(cl);
 			map<string, module*> mm;
-			int i;
 			m1.read_module(s_incorrect_module, mm, cl->map_cell);
 			mm[m1.get_module_name()] = &m1;
 			m2.read_module(s_top_module, mm, cl->map_cell);
@@ -548,7 +547,6 @@ namespace ALP2_TEST
 			Assert::AreEqual(s, d.output_design_file());
 		}
 	};
-
 	TEST_CLASS(simulation_test) {
 		TEST_METHOD(test_generate_input_vector) {
 			vector<bool> vi;
@@ -570,7 +568,6 @@ namespace ALP2_TEST
 			res[1] = false;
 			Assert::AreEqual(true, vi == res);
 		}
-
 		TEST_METHOD(test_simulation_module) {
 			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
 				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
@@ -600,9 +597,37 @@ namespace ALP2_TEST
 			d.parse_design_file(ss_module);
 			
 			simulation sim;
+			vector<bool> vi(3, false);
+			vector<bool> parallel(3, false);
 			sim.construct(d.get_top_module());
 
-			
+			sim.set_input_vector(vi);
+			parallel[0] = true;  //[0] 001
+			sim.set_parallel_input_vector(parallel, vi, 0);
+			parallel[1] = true;  //[1] 011
+			sim.set_parallel_input_vector(parallel, vi, 1);
+			parallel[0] = false; //[2] 010
+			sim.set_parallel_input_vector(parallel, vi, 2);
+			parallel[2] = true;  //[3] 110
+			sim.set_parallel_input_vector(parallel, vi, 3);
+			parallel[0] = true;  //[4] 111
+			sim.set_parallel_input_vector(parallel, vi, 4);
+			parallel[1] = false; //[5] 101
+			sim.set_parallel_input_vector(parallel, vi, 5);
+			parallel[0] = false; //[6] 100
+			sim.set_parallel_input_vector(parallel, vi, 6);
+
+			sim.simulate_module(FLIP);
+
+			Wire_value value;
+			bitset<MAX_PARALLEL_NUM> vector;
+			sim.get_node_value("top_test.o_0", value, vector);
+			Assert::AreEqual(true, value == ZERO);
+			Assert::AreEqual((unsigned long)16, vector.to_ulong());
+
+			sim.get_node_value("top_test.U1.o_1", value, vector);
+			Assert::AreEqual(true, value == ZERO);
+			Assert::AreEqual((unsigned long)127, vector.to_ulong());
 		}
 	};
 }
