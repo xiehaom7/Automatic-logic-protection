@@ -65,10 +65,9 @@ simulation_evaluation&	simulation_evaluation::run_golden_simulation(
 
 simulation_evaluation& simulation_evaluation::run_fault_injection_simulation(
 	int fault_num, vector<bool> *start_inputs = NULL, bool random = true, Fault_mode fm = FLIP) {
-	if (fault_num >= MAX_PARALLEL_NUM)
+	if (fault_num > MAX_PARALLEL_NUM)
 		throw exception(("specified fault number " + std::to_string(fault_num) + " exceeds max parallel number " 
 			+ std::to_string(MAX_PARALLEL_NUM) + ".(run_fault_injection_simulation)").c_str());
-	int i;
 	vector<bool> empty_vector(input_num, false);
 	if (start_inputs == NULL)
 		start_inputs = &empty_vector;
@@ -126,11 +125,11 @@ void simulation_evaluation::run_exhaustive_golden_simulation() {
 	vector<bool> input_vector(input_num, false);
 	bitset<MAX_PARALLEL_NUM> res;
 
-	while (sim_num > 0) {			
+	while (sim_num > 0) {
 		round_num = (sim_num > MAX_PARALLEL_NUM) ? MAX_PARALLEL_NUM : sim_num;
 		sim_num -= MAX_PARALLEL_NUM;
 		run_golden_simulation(round_num, false, &input_vector);
-		summarize_golden_results(round_num);
+		summarize_golden_results(round_num);		
 	}
 	return;
 }
@@ -141,7 +140,7 @@ void simulation_evaluation::summarize_fault_injection_results(int fault_num) {
 	bitset<MAX_PARALLEL_NUM> res;
 	bitset<MAX_PARALLEL_NUM> output_res;
 	size_t count;
-	int i;
+	size_t i;
 	set<string> primary_output_list;
 	vector<int>* fault_injeciton_list = sim.get_fault_injection_list();
 	output_res.reset();
@@ -153,7 +152,7 @@ void simulation_evaluation::summarize_fault_injection_results(int fault_num) {
 		ite->uAffection += count;
 		if (primary_output_list.find((*ite).sName) != primary_output_list.end())
 			output_res |= res;
-		(value == ONE) ? ite->uLogicOne++ : ite->uLogicZero++;
+		(value == ONE) ? ite->uLogicOne += fault_num : ite->uLogicZero += fault_num;
 	}
 	
 	for (i = 0; i < (*fault_injeciton_list).size(); i++) {
@@ -173,6 +172,7 @@ void simulation_evaluation::summarize_golden_results(long parallel_num) {
 	for (ite = vStatNodeList.begin(); ite != vStatNodeList.end(); ite++) {
 		sim.get_node_value((*ite).sName, value, res);
 		count = res.count();
+		
 		if (value == ONE) {
 			ite->uLogicZero += count;
 			ite->uLogicOne += parallel_num - count;

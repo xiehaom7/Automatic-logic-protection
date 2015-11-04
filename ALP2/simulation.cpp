@@ -424,13 +424,13 @@ simulation& simulation::inject_faults(int fault_num, Gen_mode mode) {
 	int target_size = vFaultCandidateLst.size();
 	int i;
 
-	if (target_size == 0)
-		return *this;
-
 	for (vector<SimNode*>::iterator ite = vSimNodeLst.begin(); ite != vSimNodeLst.end(); ite++) {
 		(*ite)->bsParallelVector.reset();
 	}
 	vFaultInjectionLst.clear();
+
+	if (target_size == 0)
+		return *this;
 
 	switch (mode) {
 	case RESET:

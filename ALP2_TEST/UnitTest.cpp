@@ -599,6 +599,7 @@ namespace ALP2_TEST
 			if (MAX_PARALLEL_NUM < 8) {
 				Logger::WriteMessage(
 					"test_simulation_module skipped due to small MAX_PARALLEL_NUM.");
+				return;
 			}
 
 			simulation sim;
@@ -657,6 +658,7 @@ namespace ALP2_TEST
 			if (MAX_PARALLEL_NUM < 3) {
 				Logger::WriteMessage(
 					"test_simulation_module_2 skipped due to small MAX_PARALLEL_NUM.");
+				return;
 			}
 
 			sim.set_input_vector(vi);
@@ -769,57 +771,57 @@ namespace ALP2_TEST
 			StatNode* tar_node;
 
 			tar_node = sv.get_stat_node(string("top_test.i_0"));
-			Assert::AreEqual((unsigned)4, tar_node->uLogicOne);
-			Assert::AreEqual((unsigned)4, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)20, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)20, tar_node->uLogicZero);
 			Assert::AreEqual((unsigned)0, tar_node->uPropagation);
 			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
 			Assert::AreEqual((unsigned)0, tar_node->uInjection);
 			Assert::AreEqual((unsigned)0, tar_node->uAffection);
 			tar_node = sv.get_stat_node(string("top_test.i_1"));
-			Assert::AreEqual((unsigned)4, tar_node->uLogicOne);
-			Assert::AreEqual((unsigned)4, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)20, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)20, tar_node->uLogicZero);
 			Assert::AreEqual((unsigned)0, tar_node->uPropagation);
 			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
 			Assert::AreEqual((unsigned)0, tar_node->uInjection);
 			Assert::AreEqual((unsigned)0, tar_node->uAffection);
 			tar_node = sv.get_stat_node(string("top_test.i_2"));
-			Assert::AreEqual((unsigned)4, tar_node->uLogicOne);
-			Assert::AreEqual((unsigned)4, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)20, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)20, tar_node->uLogicZero);
 			Assert::AreEqual((unsigned)0, tar_node->uPropagation);
 			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
 			Assert::AreEqual((unsigned)0, tar_node->uInjection);
 			Assert::AreEqual((unsigned)0, tar_node->uAffection);
 			tar_node = sv.get_stat_node(string("top_test.U1.w_0"));
-			Assert::AreEqual((unsigned)2, tar_node->uLogicOne);
-			Assert::AreEqual((unsigned)6, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)10, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)30, tar_node->uLogicZero);
 			Assert::AreEqual((unsigned)4, tar_node->uPropagation);
 			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
 			Assert::AreEqual((unsigned)8, tar_node->uInjection);
 			Assert::AreEqual((unsigned)8, tar_node->uAffection);
 			tar_node = sv.get_stat_node(string("top_test.U1.w_1"));
-			Assert::AreEqual((unsigned)6, tar_node->uLogicOne);
-			Assert::AreEqual((unsigned)2, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)30, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)10, tar_node->uLogicZero);
 			Assert::AreEqual((unsigned)0, tar_node->uPropagation);
 			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
 			Assert::AreEqual((unsigned)8, tar_node->uInjection);
 			Assert::AreEqual((unsigned)8, tar_node->uAffection);
 			tar_node = sv.get_stat_node(string("top_test.U1.o_0"));
-			Assert::AreEqual((unsigned)1, tar_node->uLogicOne);
-			Assert::AreEqual((unsigned)7, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)5, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)35, tar_node->uLogicZero);
 			Assert::AreEqual((unsigned)7, tar_node->uPropagation);
 			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
 			Assert::AreEqual((unsigned)8, tar_node->uInjection);
 			Assert::AreEqual((unsigned)12, tar_node->uAffection);
 			tar_node = sv.get_stat_node(string("top_test.U1.o_1"));
-			Assert::AreEqual((unsigned)7, tar_node->uLogicOne);
-			Assert::AreEqual((unsigned)1, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)35, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)5, tar_node->uLogicZero);
 			Assert::AreEqual((unsigned)1, tar_node->uPropagation);
 			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
 			Assert::AreEqual((unsigned)8, tar_node->uInjection);
 			Assert::AreEqual((unsigned)12, tar_node->uAffection);
 			tar_node = sv.get_stat_node(string("top_test.o_0"));
-			Assert::AreEqual((unsigned)1, tar_node->uLogicOne);
-			Assert::AreEqual((unsigned)7, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)5, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)35, tar_node->uLogicZero);
 			Assert::AreEqual((unsigned)8, tar_node->uPropagation);
 			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
 			Assert::AreEqual((unsigned)8, tar_node->uInjection);
