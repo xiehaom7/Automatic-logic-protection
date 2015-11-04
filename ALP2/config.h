@@ -13,3 +13,6 @@ const unsigned RW_OP_OPERAND_LENGTH = 8;
 const int MAX_RAND_NUM = 32767;
 const int MAX_RAND_BIT = 15;
 const int MAX_PARALLEL_NUM = 512;
+
+/*signature configuration*/
+const int SIGNATURE_SIZE = 64;

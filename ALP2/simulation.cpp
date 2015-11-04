@@ -22,39 +22,30 @@ simulation::~simulation() {
 	destroy();
 }
 
-void simulation::_init_stat_node(StatNode &sn) {
-	sn.uInjection = 0;
-	sn.uPropagation = 0;
-	sn.uLogicOne = 0;
-	sn.uLogicZero = 0;
-	sn.uAffection = 0;
-	sn.uSimulation = 0;
-}
-
 //TO DO
-unsigned simulation::_count_fault_res() {
-	unsigned i, j;
-	bitset<MAX_PARALLEL_NUM> res;
-	unsigned error = 0;
-
-	for (j = 0; j < vPrimaryOutputLst.size(); j++) {
-		//		vSimNodeLst[vPrimaryOutputLst[j]]->bsParallelVector.count();
-		res |= vSimNodeLst[vPrimaryOutputLst[j]]->bsParallelVector;
-	}
-	if (res.any()) {
-		error += res.count();
-	}
-
-	i = 0;
-	while (!res.none()) {
-		if (res.test(i)) {
-			vSimNodeLst[vFaultInjectionLst[i]]->strStat.uPropagation++;
-			res.reset(i);
-		}
-		i++;
-	}
-	return error;
-}
+//unsigned simulation::_count_fault_res() {
+//	unsigned i, j;
+//	bitset<MAX_PARALLEL_NUM> res;
+//	unsigned error = 0;
+//
+//	for (j = 0; j < vPrimaryOutputLst.size(); j++) {
+//		//		vSimNodeLst[vPrimaryOutputLst[j]]->bsParallelVector.count();
+//		res |= vSimNodeLst[vPrimaryOutputLst[j]]->bsParallelVector;
+//	}
+//	if (res.any()) {
+//		error += res.count();
+//	}
+//
+//	i = 0;
+//	while (!res.none()) {
+//		if (res.test(i)) {
+//			vSimNodeLst[vFaultInjectionLst[i]]->strStat.uPropagation++;
+//			res.reset(i);
+//		}
+//		i++;
+//	}
+//	return error;
+//}
 
 int simulation::construct_module(const vector<int> &input_list, 
 	vector<int> &output_list, int start_pos, module* tar_module, string prefix) {
@@ -134,7 +125,6 @@ SimNode* simulation::_creat_sim_node(net* current_net, string &prefix, vector<in
 	new_sim_node->vFanin = input_index_list;
 	if (current_net->get_fanin_node() != NULL)
 		new_sim_node->pCell = current_net->get_fanin_node()->get_cell_ref();
-	_init_stat_node(new_sim_node->strStat);
 	return new_sim_node;
 }
 
@@ -205,6 +195,7 @@ void simulation::generate_fault_list() {
 	vector<string> prefix_list;
 	for (ite_prefix = mapPrefix.cbegin(); ite_prefix != mapPrefix.cend(); ite_prefix++)
 		prefix_list.push_back(ite_prefix->first);
+	generate_fault_list(prefix_list);
 	return;
 }
 
@@ -224,6 +215,10 @@ simulation& simulation::_parallel_simulate_node(SimNode* tar_node, Fault_mode fm
 	bitset<MAX_PARALLEL_NUM> parallel_vector(0);
 
 	for (j = 0; j < fanin_num; j++) {
+		if (vSimNodeLst[tar_node->vFanin[j]]->eValue != ZERO &&
+			vSimNodeLst[tar_node->vFanin[j]]->eValue != ONE)
+			throw exception(("unknown value on " + vSimNodeLst[tar_node->vFanin[j]]->sPrefix + "." +
+				vSimNodeLst[tar_node->vFanin[j]]->sName + " during simulation. (_parallel_simulate_node)").c_str());
 		truth_table_index = (vSimNodeLst[tar_node->vFanin[j]]->eValue == ZERO) ? (truth_table_index << 1) : ((truth_table_index << 1) + 1);
 		parallel_vector |= vSimNodeLst[tar_node->vFanin[j]]->bsParallelVector;
 	}
@@ -468,22 +463,22 @@ simulation& simulation::inject_faults(int fault_num, Gen_mode mode) {
 	return *this;
 }
 
-void simulation::display(const string& display_file) {
-	ofstream pFile(display_file.c_str());
-	pFile << save_info();
-	pFile.close();
-	return;
-}
+//void simulation::display(const string& display_file) {
+//	ofstream pFile(display_file.c_str());
+//	pFile << save_info();
+//	pFile.close();
+//	return;
+//}
 
-string simulation::save_info() {
-	stringstream ss;
-	for (vector<SimNode*>::iterator ite = vSimNodeLst.begin(); ite != vSimNodeLst.end(); ite++) {
-		ss << (*ite)->sName << "\t" << (*ite)->strStat.uLogicOne << "\t" << (*ite)->strStat.uLogicZero <<
-			"\t" << (*ite)->strStat.uInjection << "\t" << (*ite)->strStat.uPropagation << "\t" <<
-			(*ite)->strStat.uSimulation << "\t" << (*ite)->strStat.uAffection << endl;
-	}
-	return ss.str();
-}
+//string simulation::save_info() {
+//	stringstream ss;
+//	for (vector<SimNode*>::iterator ite = vSimNodeLst.begin(); ite != vSimNodeLst.end(); ite++) {
+//		ss << (*ite)->sName << "\t" << (*ite)->strStat.uLogicOne << "\t" << (*ite)->strStat.uLogicZero <<
+//			"\t" << (*ite)->strStat.uInjection << "\t" << (*ite)->strStat.uPropagation << "\t" <<
+//			(*ite)->strStat.uSimulation << "\t" << (*ite)->strStat.uAffection << endl;
+//	}
+//	return ss.str();
+//}
 
 simulation& simulation::set_input_vector(vector<bool> &inputs) {
 	unsigned input_size = vPrimaryInputLst.size();
@@ -508,7 +503,8 @@ simulation& simulation::set_parallel_input_vector(vector<bool> &parallel, vector
 	return *this;
 }
 
-simulation& simulation::get_node_value(string name, Wire_value &value, bitset<MAX_PARALLEL_NUM> &vector) {
+simulation& simulation::get_node_value(string name, 
+	Wire_value &value, bitset<MAX_PARALLEL_NUM> &vector) {
 	std::map<string, int>::const_iterator ite = mapSimNodeLst.find(name);
 	if (ite == mapSimNodeLst.end())
 		throw exception(("node " + name + "not found. (get_node_value)").c_str());
@@ -524,3 +520,20 @@ bool simulation::return_outputs(vector<Wire_value> &outputs) {
 bool simulation::return_inputs(vector<Wire_value> &inputs) {
 	return true;
 }
+
+simulation&	simulation::get_node_name_list(vector<string> &name_list) {
+	vector<SimNode*>::iterator ite;
+	for (ite = vSimNodeLst.begin(); ite != vSimNodeLst.end(); ite++) {
+		name_list.push_back((*ite)->sPrefix + "." + (*ite)->sName);
+	}
+	return *this;
+}
+
+simulation& simulation::get_primary_outputs_list(set<string> &output_list) {
+	vector<int>::const_iterator c_ite;
+	for (c_ite = vPrimaryOutputLst.cbegin(); c_ite != vPrimaryOutputLst.cend(); c_ite++) {
+		output_list.insert(vSimNodeLst[(*c_ite)]->sPrefix + "." + vSimNodeLst[(*c_ite)]->sName);
+	}
+	return *this;
+}
+

@@ -7,15 +7,6 @@ typedef enum { RANDOM, SEQUENCE, RESET } Gen_mode;
 typedef enum { SA1, SA0, FLIP, NONE } Fault_mode;
 
 typedef struct {
-	unsigned				uLogicOne;
-	unsigned				uLogicZero;
-	unsigned				uInjection;
-	unsigned				uPropagation;
-	unsigned				uSimulation;
-	unsigned				uAffection;
-}StatNode;
-
-typedef struct {
 public:
 	string						sName;
 	string						sPrefix;
@@ -23,7 +14,6 @@ public:
 	vector<int>					vFanin;
 	cell*						pCell;
 	bitset<MAX_PARALLEL_NUM>	bsParallelVector;
-	StatNode					strStat;
 }SimNode;
 
 class simulation {
@@ -38,7 +28,6 @@ private:
 	unsigned					uFaultIndex;
 
 private:
-	void		_init_stat_node(StatNode &sn);
 	unsigned	_count_fault_res();
 	SimNode*	_creat_sim_node(net* current_net, string &prefix, vector<int> &input_index_list);
 
@@ -61,7 +50,7 @@ public:
 	//void		simulate();
 	//void		simulate_w_fault(Fault_mode fm, int fault_num);
 	//void		simulate_w_fault_dump(Fault_mode fm, int fault_num, const string dump_file_name);
-//	simulation&	run_fault_injection_simulation(Sim_mode sm, Fault_mode fm, int sim_num, int fault_num, bool random = true);
+	//simulation&	run_fault_injection_simulation(Sim_mode sm, Fault_mode fm, int sim_num, int fault_num, bool random = true);
 	//simulation&	run_exhaustive_FI_simulation(Fault_mode fm);
 	//simulation& run_random_golden_simulation(int sim_num);
 	//simulation& run_random_FI_simulation(Fault_mode fm, int sim_num, int fault_num);
@@ -73,8 +62,29 @@ public:
 	simulation&	set_input_vector(vector<bool> &inputs);
 	simulation& set_parallel_input_vector(vector<bool> &parallel, vector<bool> &main, unsigned round);
 	simulation& get_node_value(string name, Wire_value &value, bitset<MAX_PARALLEL_NUM> &vector);
+	simulation&	get_node_name_list(vector<string> &name_list);
+	simulation& get_primary_outputs_list(set<string> &output_list);
+	int			get_primary_inputs_num();
+	int			get_primary_outputs_num();
+	int			get_fault_candidate_size();
+	vector<int>*	get_fault_injection_list();
 
 public:
 	static void generate_input_vector(vector<bool> &input_vector, Gen_mode mode);
 };
 
+inline int simulation::get_primary_inputs_num() {
+	return vPrimaryInputLst.size();
+}
+
+inline int simulation::get_primary_outputs_num() {
+	return vPrimaryOutputLst.size();
+}
+
+inline vector<int>*	simulation::get_fault_injection_list() {
+	return &vFaultInjectionLst;
+}
+
+inline int simulation::get_fault_candidate_size() {
+	return vFaultCandidateLst.size();
+}

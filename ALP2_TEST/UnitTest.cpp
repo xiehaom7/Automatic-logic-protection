@@ -16,6 +16,8 @@
 #include "node.cpp"
 #include "simulation.h"
 #include "simulation.cpp"
+#include "simulation_evaluation.h"
+#include "simulation_evaluation.cpp"
 #include <map>
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -542,8 +544,6 @@ namespace ALP2_TEST
 			d.set_top_module("test");
 			Assert::AreEqual(string("test"), d.get_top_module()->get_module_name());
 
-			Logger::WriteMessage("report");
-			Logger::WriteMessage(d.output_design_file().c_str());
 			Assert::AreEqual(s, d.output_design_file());
 		}
 	};
@@ -596,6 +596,11 @@ namespace ALP2_TEST
 			stringstream ss_module(s);
 			d.parse_design_file(ss_module);
 			
+			if (MAX_PARALLEL_NUM < 8) {
+				Logger::WriteMessage(
+					"test_simulation_module skipped due to small MAX_PARALLEL_NUM.");
+			}
+
 			simulation sim;
 			vector<bool> vi(3, false);
 			vector<bool> parallel(3, false);
@@ -628,6 +633,197 @@ namespace ALP2_TEST
 			sim.get_node_value("top_test.U1.o_1", value, vector);
 			Assert::AreEqual(true, value == ZERO);
 			Assert::AreEqual((unsigned long)127, vector.to_ulong());
+		}
+		TEST_METHOD(test_simulation_module_2) {
+			stringstream ss("#BIAS\nA1 A2\nZN\n1001\n1100 0110 0011\n");
+			cell_library*	cl;
+			cl = new cell_library("test_lib");
+			cl->parse_cc_file(ss);
+			string  s_top_module = "module top_test (i_0, i_1, o_0);\n"
+				"input i_0, i_1;\n"
+				"output o_0;\n"
+				"BIAS U1 (.A1(i_0), .A2(i_1), .ZN(o_0) );\n"
+				"endmodule\n";
+			string s = s_top_module;
+			design d(cl);
+			stringstream ss_module(s);
+			d.parse_design_file(ss_module);
+
+			simulation sim;
+			vector<bool> vi(2, false);
+			vector<bool> parallel(2, false);
+			sim.construct(d.get_top_module());
+
+			if (MAX_PARALLEL_NUM < 3) {
+				Logger::WriteMessage(
+					"test_simulation_module_2 skipped due to small MAX_PARALLEL_NUM.");
+			}
+
+			sim.set_input_vector(vi);
+			parallel[0] = true;  //[0] 01
+			sim.set_parallel_input_vector(parallel, vi, 0);
+			parallel[1] = true;  //[1] 11
+			sim.set_parallel_input_vector(parallel, vi, 1);
+			parallel[0] = false; //[2] 10
+			sim.set_parallel_input_vector(parallel, vi, 2);
+
+			sim.simulate_module(FLIP);
+
+			Wire_value value;
+			bitset<MAX_PARALLEL_NUM> vector;
+			sim.get_node_value("top_test.o_0", value, vector);
+			Assert::AreEqual(true, value == ZERO);
+			Assert::AreEqual((unsigned long)4, vector.to_ulong());
+		}
+	};
+	TEST_CLASS(simulation_evaluation_test) {
+		TEST_METHOD(test_run_exhaustive_golden_simulation) {
+			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
+				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
+				"#AND3_X1\nA1 A2 A3\nZN");
+			cell_library*	cl;
+			cl = new cell_library("test_lib");
+			cl->parse_cc_file(ss);
+			string s_module = "module test (i_0, i_1, i_2, o_0, o_1);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0, o_1;\n"
+				"wire w_0, w_1;\n\n"
+				"AND2_X1 U1 (.A1(i_0), .A2(i_1), .ZN(w_0) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(i_2), .ZN(o_0) );\n"
+				"OR2_X1 U3 (.A1(i_0), .A2(i_1), .ZN(w_1) );\n"
+				"OR2_X1 U4 (.A1(w_1), .A2(i_2), .ZN(o_1) );\n"
+				"endmodule\n";
+			string  s_top_module = "module top_test (i_0, i_1, i_2, o_0);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0;\n"
+				"wire w_0, w_1;\n\n"
+				"test U1 (.i_0(i_0), .i_1(i_1), .i_2(i_2), .o_0(w_0), .o_1(w_1) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(w_1), .ZN(o_0) );\n"
+				"endmodule\n";
+			string s = s_module + "\n" + s_top_module + "\n";
+			design d(cl);
+			stringstream ss_module(s);
+			d.parse_design_file(ss_module);
+
+			simulation_evaluation sv;
+			sv.construct(d.get_top_module());
+			sv.run_exhaustive_golden_simulation();
+			StatNode* tar_node;
+
+			tar_node = sv.get_stat_node(string("top_test.i_0"));
+			Assert::AreEqual((unsigned)4, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)4, tar_node->uLogicZero);
+			tar_node = sv.get_stat_node(string("top_test.i_1"));
+			Assert::AreEqual((unsigned)4, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)4, tar_node->uLogicZero);
+			tar_node = sv.get_stat_node(string("top_test.i_2"));
+			Assert::AreEqual((unsigned)4, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)4, tar_node->uLogicZero);
+			tar_node = sv.get_stat_node(string("top_test.U1.w_0"));
+			Assert::AreEqual((unsigned)2, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)6, tar_node->uLogicZero);
+			tar_node = sv.get_stat_node(string("top_test.U1.w_1"));
+			Assert::AreEqual((unsigned)6, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)2, tar_node->uLogicZero);
+			tar_node = sv.get_stat_node(string("top_test.U1.o_0"));
+			Assert::AreEqual((unsigned)1, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)7, tar_node->uLogicZero);
+			tar_node = sv.get_stat_node(string("top_test.U1.o_1"));
+			Assert::AreEqual((unsigned)7, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)1, tar_node->uLogicZero);
+			tar_node = sv.get_stat_node(string("top_test.o_0"));
+			Assert::AreEqual((unsigned)1, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)7, tar_node->uLogicZero);
+		}
+		TEST_METHOD(test_run_exhaustive_fault_injection_simulation) {
+			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
+				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
+				"#AND3_X1\nA1 A2 A3\nZN");
+			cell_library*	cl;
+			cl = new cell_library("test_lib");
+			cl->parse_cc_file(ss);
+			string s_module = "module test (i_0, i_1, i_2, o_0, o_1);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0, o_1;\n"
+				"wire w_0, w_1;\n\n"
+				"AND2_X1 U1 (.A1(i_0), .A2(i_1), .ZN(w_0) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(i_2), .ZN(o_0) );\n"
+				"OR2_X1 U3 (.A1(i_0), .A2(i_1), .ZN(w_1) );\n"
+				"OR2_X1 U4 (.A1(w_1), .A2(i_2), .ZN(o_1) );\n"
+				"endmodule\n";
+			string  s_top_module = "module top_test (i_0, i_1, i_2, o_0);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0;\n"
+				"wire w_0, w_1;\n\n"
+				"test U1 (.i_0(i_0), .i_1(i_1), .i_2(i_2), .o_0(w_0), .o_1(w_1) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(w_1), .ZN(o_0) );\n"
+				"endmodule\n";
+			string s = s_module + "\n" + s_top_module + "\n";
+			design d(cl);
+			stringstream ss_module(s);
+			d.parse_design_file(ss_module);
+
+			simulation_evaluation sv;
+			sv.construct(d.get_top_module());
+			sv.run_exhaustive_fault_injection_simulation();
+			StatNode* tar_node;
+
+			tar_node = sv.get_stat_node(string("top_test.i_0"));
+			Assert::AreEqual((unsigned)4, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)4, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)0, tar_node->uPropagation);
+			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
+			Assert::AreEqual((unsigned)0, tar_node->uInjection);
+			Assert::AreEqual((unsigned)0, tar_node->uAffection);
+			tar_node = sv.get_stat_node(string("top_test.i_1"));
+			Assert::AreEqual((unsigned)4, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)4, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)0, tar_node->uPropagation);
+			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
+			Assert::AreEqual((unsigned)0, tar_node->uInjection);
+			Assert::AreEqual((unsigned)0, tar_node->uAffection);
+			tar_node = sv.get_stat_node(string("top_test.i_2"));
+			Assert::AreEqual((unsigned)4, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)4, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)0, tar_node->uPropagation);
+			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
+			Assert::AreEqual((unsigned)0, tar_node->uInjection);
+			Assert::AreEqual((unsigned)0, tar_node->uAffection);
+			tar_node = sv.get_stat_node(string("top_test.U1.w_0"));
+			Assert::AreEqual((unsigned)2, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)6, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)4, tar_node->uPropagation);
+			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
+			Assert::AreEqual((unsigned)8, tar_node->uInjection);
+			Assert::AreEqual((unsigned)8, tar_node->uAffection);
+			tar_node = sv.get_stat_node(string("top_test.U1.w_1"));
+			Assert::AreEqual((unsigned)6, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)2, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)0, tar_node->uPropagation);
+			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
+			Assert::AreEqual((unsigned)8, tar_node->uInjection);
+			Assert::AreEqual((unsigned)8, tar_node->uAffection);
+			tar_node = sv.get_stat_node(string("top_test.U1.o_0"));
+			Assert::AreEqual((unsigned)1, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)7, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)7, tar_node->uPropagation);
+			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
+			Assert::AreEqual((unsigned)8, tar_node->uInjection);
+			Assert::AreEqual((unsigned)12, tar_node->uAffection);
+			tar_node = sv.get_stat_node(string("top_test.U1.o_1"));
+			Assert::AreEqual((unsigned)7, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)1, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)1, tar_node->uPropagation);
+			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
+			Assert::AreEqual((unsigned)8, tar_node->uInjection);
+			Assert::AreEqual((unsigned)12, tar_node->uAffection);
+			tar_node = sv.get_stat_node(string("top_test.o_0"));
+			Assert::AreEqual((unsigned)1, tar_node->uLogicOne);
+			Assert::AreEqual((unsigned)7, tar_node->uLogicZero);
+			Assert::AreEqual((unsigned)8, tar_node->uPropagation);
+			Assert::AreEqual((unsigned)40, tar_node->uSimulation);
+			Assert::AreEqual((unsigned)8, tar_node->uInjection);
+			Assert::AreEqual((unsigned)20, tar_node->uAffection);
 		}
 	};
 }
