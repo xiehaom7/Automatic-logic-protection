@@ -26,8 +26,9 @@ class simulation_evaluation
 private:
 	vector<StatNode>		vStatNodeList;
 	map<string, int>		mStatNode;
-	simulation				sim;
-	int						input_num;
+	simulation*				sim;
+	size_t					input_num;
+	size_t					node_num;
 private:
 	StatNode				_init_stat_node(string name);
 public:
@@ -35,7 +36,7 @@ public:
 	~simulation_evaluation();
 public:
 	void					destroy();
-	bool					construct(module* top_module);
+	bool					construct(simulation* tar_sim);
 	void					generate_signature();
 	void					run_exhaustive_golden_simulation();
 	void					run_exhaustive_fault_injection_simulation();
@@ -46,5 +47,7 @@ public:
 	void					summarize_golden_results(long parallel_num);
 	void					summarize_fault_injection_results(int fault_num);
 	StatNode*				get_stat_node(string& node_name);
+	void					get_node_value(string name, Wire_value **value, bitset<MAX_PARALLEL_NUM> **vector);
+	void					get_node_value(size_t index, Wire_value **value, bitset<MAX_PARALLEL_NUM> **vector);
 };
 
