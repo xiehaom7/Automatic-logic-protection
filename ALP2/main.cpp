@@ -1,6 +1,7 @@
 #include "cell.h"
 #include "design.h"
 #include "simulation_evaluation.h"
+#include "signature.h"
 #include <fstream>
 #include <map>
 
@@ -24,15 +25,20 @@ int main() {
 	d.parse_design_file(ss);
 	simulation sim;
 	sim.construct(d.get_top_module());
-	simulation_evaluation sv;
-	sv.construct(&sim);
+	
 	try {
 		start = clock();
-		sv.run_exhaustive_fault_injection_simulation();
+		/*simulation_evaluation sv;
+		sv.construct(&sim);
+		sv.run_exhaustive_fault_injection_simulation();*/
+
+		signature sig;
+		sig.construct(&sim);
+		sig.generate_signature();
 		finish = clock();
 		totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
 		cout << "\nRuntime : " << totaltime << "seconds" << endl;
-	}		
+	}
 	catch (exception e)
 	{ cout << e.what(); }
 	return 0;

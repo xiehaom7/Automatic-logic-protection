@@ -18,6 +18,7 @@ public:
 
 class simulation {
 	friend class simulation_evaluation;
+	friend class signature;
 private:
 	vector<SimNode*>			vSimNodeLst;
 	map<string, int>			mapSimNodeLst;
@@ -50,12 +51,17 @@ public:
 	bool		return_inputs(vector<Wire_value> &inputs);
 	simulation&	set_input_vector(vector<bool> &inputs);
 	simulation& set_parallel_input_vector(vector<bool> &parallel, vector<bool> &main, unsigned round);
-	simulation& get_node_value(string name, Wire_value &value, bitset<MAX_PARALLEL_NUM> &vector);
 	simulation&	get_node_name_list(vector<string> &name_list);
 	simulation& get_primary_outputs_list(set<string> &output_list);
 	int			get_primary_inputs_num();
 	int			get_primary_outputs_num();
 	int			get_fault_candidate_size();
+	simulation&	run_golden_simulation(
+		int sim_num, bool random = true, vector<bool> *start_inputs = NULL);
+	simulation& run_fault_injection_simulation(
+		int fault_num, vector<bool> *start_inputs = NULL, bool random = true, Fault_mode fm = FLIP);
+	void		get_node_value(string name, Wire_value **value, bitset<MAX_PARALLEL_NUM> **vector);
+	void		get_node_value(size_t index, Wire_value **value, bitset<MAX_PARALLEL_NUM> **vector);
 	vector<int>*	get_fault_injection_list();
 
 public:

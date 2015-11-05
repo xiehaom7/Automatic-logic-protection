@@ -45,6 +45,9 @@
     <ClInclude Include="simulation_evaluation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="signature.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="net.cpp">
@@ -75,6 +78,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="simulation_evaluation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="signature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

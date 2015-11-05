@@ -625,15 +625,15 @@ namespace ALP2_TEST
 
 			sim.simulate_module(FLIP);
 
-			Wire_value value;
-			bitset<MAX_PARALLEL_NUM> vector;
-			sim.get_node_value("top_test.o_0", value, vector);
-			Assert::AreEqual(true, value == ZERO);
-			Assert::AreEqual((unsigned long)16, vector.to_ulong());
+			Wire_value* value = NULL;
+			bitset<MAX_PARALLEL_NUM>* vector = NULL;
+			sim.get_node_value("top_test.o_0", &value, &vector);
+			Assert::AreEqual(true, *value == ZERO);
+			Assert::AreEqual((unsigned long)16, vector->to_ulong());
 
-			sim.get_node_value("top_test.U1.o_1", value, vector);
-			Assert::AreEqual(true, value == ZERO);
-			Assert::AreEqual((unsigned long)127, vector.to_ulong());
+			sim.get_node_value("top_test.U1.o_1", &value, &vector);
+			Assert::AreEqual(true, *value == ZERO);
+			Assert::AreEqual((unsigned long)127, vector->to_ulong());
 		}
 		TEST_METHOD(test_simulation_module_2) {
 			stringstream ss("#BIAS\nA1 A2\nZN\n1001\n1100 0110 0011\n");
@@ -671,11 +671,11 @@ namespace ALP2_TEST
 
 			sim.simulate_module(FLIP);
 
-			Wire_value value;
-			bitset<MAX_PARALLEL_NUM> vector;
-			sim.get_node_value("top_test.o_0", value, vector);
-			Assert::AreEqual(true, value == ZERO);
-			Assert::AreEqual((unsigned long)4, vector.to_ulong());
+			Wire_value* value = NULL;
+			bitset<MAX_PARALLEL_NUM>* vector = NULL;
+			sim.get_node_value("top_test.o_0", &value, &vector);
+			Assert::AreEqual(true, *value == ZERO);
+			Assert::AreEqual((unsigned long)4, vector->to_ulong());
 		}
 	};
 	TEST_CLASS(simulation_evaluation_test) {

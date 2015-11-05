@@ -503,14 +503,21 @@ simulation& simulation::set_parallel_input_vector(vector<bool> &parallel, vector
 	return *this;
 }
 
-simulation& simulation::get_node_value(string name, 
-	Wire_value &value, bitset<MAX_PARALLEL_NUM> &vector) {
+void simulation::get_node_value(string name, Wire_value **value, bitset<MAX_PARALLEL_NUM> **vector) {
 	std::map<string, int>::const_iterator ite = mapSimNodeLst.find(name);
 	if (ite == mapSimNodeLst.end())
-		throw exception(("node " + name + "not found. (get_node_value)").c_str());
-	value = vSimNodeLst[ite->second]->eValue;
-	vector = vSimNodeLst[ite->second]->bsParallelVector;
-	return *this;
+		throw exception(("node " + name + " not found. (get_node_value)").c_str());
+	*value = &vSimNodeLst[ite->second]->eValue;
+	*vector = &vSimNodeLst[ite->second]->bsParallelVector;
+	return;
+}
+
+void simulation::get_node_value(size_t index, Wire_value **value, bitset<MAX_PARALLEL_NUM> **vector) {
+	if (index >= vSimNodeLst.size() || index < 0)
+		throw exception(("index " + std::to_string(index) + " exceeds range. (get_node_value)").c_str());
+	*value = &vSimNodeLst[index]->eValue;
+	*vector = &vSimNodeLst[index]->bsParallelVector;
+	return;
 }
 
 bool simulation::return_outputs(vector<Wire_value> &outputs) {
@@ -537,3 +544,36 @@ simulation& simulation::get_primary_outputs_list(set<string> &output_list) {
 	return *this;
 }
 
+simulation&	simulation::run_golden_simulation(
+	int sim_num, bool random, vector<bool> *start_inputs) {
+	size_t input_num = get_primary_inputs_num();
+	vector<bool> input_vector(input_num, false);
+	vector<bool> empty_vector(input_num, false);
+	int i;
+	if (random || start_inputs == NULL)
+		start_inputs = &empty_vector;
+	set_input_vector(input_vector);
+	inject_faults(0, RESET);
+	for (i = 0; i < sim_num; i++) {
+		set_parallel_input_vector(*start_inputs, input_vector, i);
+		generate_input_vector(*start_inputs, random ? RANDOM : SEQUENCE);
+	}
+	simulate_module(FLIP);
+	return *this;
+}
+
+simulation& simulation::run_fault_injection_simulation(
+	int fault_num, vector<bool> *start_inputs, bool random, Fault_mode fm) {
+	size_t input_num = get_primary_inputs_num();
+	if (fault_num > MAX_PARALLEL_NUM)
+		throw exception(("specified fault number " + std::to_string(fault_num) + " exceeds max parallel number "
+			+ std::to_string(MAX_PARALLEL_NUM) + ".(run_fault_injection_simulation)").c_str());
+	vector<bool> empty_vector(input_num, false);
+	if (start_inputs == NULL)
+		start_inputs = &empty_vector;
+
+	set_input_vector(*start_inputs);
+	inject_faults(fault_num, random ? RANDOM : SEQUENCE);
+	simulate_module(fm);
+	return *this;
+}

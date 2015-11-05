@@ -149,6 +149,7 @@
     <ClInclude Include="module.h" />
     <ClInclude Include="net.h" />
     <ClInclude Include="node.h" />
+    <ClInclude Include="signature.h" />
     <ClInclude Include="simulation.h" />
     <ClInclude Include="simulation_evaluation.h" />
     <ClInclude Include="string_utility.h" />
@@ -161,6 +162,7 @@
     <ClCompile Include="module.cpp" />
     <ClCompile Include="net.cpp" />
     <ClCompile Include="node.cpp" />
+    <ClCompile Include="signature.cpp" />
     <ClCompile Include="simulation.cpp" />
     <ClCompile Include="simulation_evaluation.cpp" />
     <ClCompile Include="string_utility.cpp" />
