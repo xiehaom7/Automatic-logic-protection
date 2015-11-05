@@ -17,7 +17,7 @@ int main() {
 	clock_t start, finish;
 	double totaltime;
 
-	ifstream pFile("D:\\Dropbox\\Public\\Programs\\C\\ALP\\ALP\\cmb.v");
+	ifstream pFile("D:\\Dropbox\\Public\\Programs\\C\\ALP\\ALP\\sao2.v");
 	stringstream ss;
 	assert(pFile.is_open());
 	ss << pFile.rdbuf();
@@ -28,18 +28,21 @@ int main() {
 	
 	try {
 		start = clock();
-		/*simulation_evaluation sv;
+		simulation_evaluation sv;
 		sv.construct(&sim);
-		sv.run_exhaustive_fault_injection_simulation();*/
+		sv.run_exhaustive_fault_injection_simulation();
+		sv.evaluate_fault_injection_results();
 
-		signature sig;
+		/*signature sig;
 		sig.construct(&sim);
-		sig.generate_signature();
+		sig.generate_signature();*/
 		finish = clock();
 		totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
 		cout << "\nRuntime : " << totaltime << "seconds" << endl;
 	}
 	catch (exception e)
 	{ cout << e.what(); }
+	cout << endl << "program completed! press any key to quit ..." << endl;
+	getchar();
 	return 0;
 }

@@ -34,5 +34,6 @@ public:
 	void					summarize_golden_results(long parallel_num);
 	void					summarize_fault_injection_results(int fault_num);
 	StatNode*				get_stat_node(string& node_name);
+	void					evaluate_fault_injection_results();
 };
 

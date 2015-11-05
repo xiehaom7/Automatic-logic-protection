@@ -690,11 +690,11 @@ bool module::read_module(string buff, map<string, module*> &map_module, map<stri
 			buff_wire = sm.suffix().str();
 		}
 
-		e = "([\\\\\\.\\w]+)\\s+([\\\\\\.\\w]+)\\s*\\(.*?\\);";
+		e = "([\\\\\\.\\w]+)\\s+([\\\\\\.\\w]+)\\s*\\((?:.|\\s)*?\\);";
 		rit = std::regex_iterator<std::string::iterator>(buff_s.begin(), buff_s.end(), e);
 		while (rit != rend) {
 			instance_line = rit->str();
-			std::regex e_instance_line("([\\\\\\.\\w]+)\\s+([\\\\\\.\\w]+)\\s*\\((.*?)\\);");
+			std::regex e_instance_line("([\\\\\\.\\w]+)\\s+([\\\\\\.\\w]+)\\s*\\(((?:.|\\s)*?)\\);");
 			if (std::regex_match(instance_line, sm, e_instance_line)) {
 				string gate_type = sm[1];
 				string instance_name = sm[2];

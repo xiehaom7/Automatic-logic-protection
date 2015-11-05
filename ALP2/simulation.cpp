@@ -22,31 +22,6 @@ simulation::~simulation() {
 	destroy();
 }
 
-//TO DO
-//unsigned simulation::_count_fault_res() {
-//	unsigned i, j;
-//	bitset<MAX_PARALLEL_NUM> res;
-//	unsigned error = 0;
-//
-//	for (j = 0; j < vPrimaryOutputLst.size(); j++) {
-//		//		vSimNodeLst[vPrimaryOutputLst[j]]->bsParallelVector.count();
-//		res |= vSimNodeLst[vPrimaryOutputLst[j]]->bsParallelVector;
-//	}
-//	if (res.any()) {
-//		error += res.count();
-//	}
-//
-//	i = 0;
-//	while (!res.none()) {
-//		if (res.test(i)) {
-//			vSimNodeLst[vFaultInjectionLst[i]]->strStat.uPropagation++;
-//			res.reset(i);
-//		}
-//		i++;
-//	}
-//	return error;
-//}
-
 int simulation::construct_module(const vector<int> &input_list, 
 	vector<int> &output_list, int start_pos, module* tar_module, string prefix) {
 	if (tar_module == NULL)
@@ -214,7 +189,7 @@ simulation& simulation::_parallel_simulate_node(SimNode* tar_node, Fault_mode fm
 	size_t i;
 	bitset<MAX_PARALLEL_NUM> parallel_vector(0);
 
-	for (j = 0; j < fanin_num; j++) {
+	for (j = fanin_num - 1; j >= 0; j--) {
 		if (vSimNodeLst[tar_node->vFanin[j]]->eValue != ZERO &&
 			vSimNodeLst[tar_node->vFanin[j]]->eValue != ONE)
 			throw exception(("unknown value on " + vSimNodeLst[tar_node->vFanin[j]]->sPrefix + "." +
@@ -229,7 +204,7 @@ simulation& simulation::_parallel_simulate_node(SimNode* tar_node, Fault_mode fm
 		if (!parallel_vector.test(i))
 			continue;
 		mask = 0;
-		for (j = 0; j < fanin_num; j++) {
+		for (j = fanin_num - 1; j >= 0; j--) {
 			mask = (!vSimNodeLst[tar_node->vFanin[j]]->bsParallelVector.test(i)) 
 				? (mask << 1) : ((mask << 1) + 1);
 		}
@@ -262,117 +237,6 @@ simulation& simulation::simulate_module(Fault_mode fm) {
 	}
 	return *this;
 }
-
-//simulation& simulation::run_fault_injection_simulation(Sim_mode sm, Fault_mode fm, int sim_num, int fault_num) {
-//	switch (sm)
-//	{
-//	case Sim_mode::EXHAUSTIVE :
-//		run_exhaustive_FI_simulation(fm);
-//		break;
-//	case Sim_mode::RANDOM :
-//		run_random_FI_simulation(fm, sim_num, fault_num);
-//		break;
-//	case Sim_mode::NONE :
-//		run_random_golden_simulation(sim_num);
-//		break;
-//	default:
-//		break;
-//	}
-//	return *this;
-//}
-
-//simulation& simulation::run_random_golden_simulation(int sim_num) {
-//	if (sim_num > MAX_PARALLEL_NUM)
-//		throw exception(("specified simulation number " + std::to_string(sim_num) +
-//			" exceeds the maximum value " + std::to_string(MAX_PARALLEL_NUM) +
-//			". (run_random_golden_simulation)").c_str());
-//	vector<bool> main_input_vector(vPrimaryInputLst.size(), false);
-//	vector<bool> parallel_input_vector(vPrimaryInputLst.size(), false);
-//	bool start_flag = false;
-//	bool stop_flag = false;
-//	int i;
-//
-//	generate_input_vector(main_input_vector, Gen_mode::RESET);
-//	set_input_vector(main_input_vector);
-//
-//	for (i = 0; i < sim_num; i++){
-//		generate_input_vector(parallel_input_vector, Gen_mode::RANDOM);
-//		set_parallel_input_vector(parallel_input_vector, main_input_vector, i);
-//	}
-//	_parallel_simulate_module(Fault_mode::FLIP, sim_num);
-//
-//	return *this;
-//}
-
-//simulation& simulation::run_exhaustive_FI_simulation(Fault_mode fm) {
-//	bool start_flag = false;
-//	bool stop_flag = false;
-//	long total = 0;
-//	long error = 0;
-//	vector<bool> input_vector(vPrimaryInputLst.size(), false);
-//
-//	generate_input_vector(input_vector, RESET);
-//	inject_faults(0, RESET);
-//
-//	while (!stop_flag) {
-//		if (!start_flag) {
-//			start_flag = true;
-//		}
-//		else {
-//			generate_input_vector(input_vector, SEQUENCE);
-//		}
-//
-//		set_input_vector(input_vector);
-//
-//		//check stop condition (all inputs equal Logic One)
-//		stop_flag = true;
-//		for (vector<bool>::iterator ite = input_vector.begin(); ite != input_vector.end() && stop_flag; ite++)
-//			stop_flag = *ite;
-//
-//		int target_num = vFaultCandidateLst.size();
-//
-//		while (target_num > 0) {
-//			int fault_num = (target_num > MAX_PARALLEL_NUM) ? MAX_PARALLEL_NUM : target_num;
-//			inject_faults(fault_num, SEQUENCE);
-//
-//			_parallel_simulate_module(fm, fault_num);
-//			target_num -= fault_num;
-//			//TO DO remove
-//			error += _count_fault_res();
-//			total += fault_num;
-//		}
-//	}
-//	cout << "error: " << error << endl;
-//	cout << "total: " << total << endl;
-//	cout << "ratio: " << (float)error / total << endl;
-//	return *this;
-//}
-
-//simulation& simulation::run_random_FI_simulation(Fault_mode fm, int sim_num, int fault_num) {
-//	int i;
-//	int total = 0;
-//	int error = 0;
-//	vector<bool> input_vector(vPrimaryInputLst.size(), false);
-//	if (fault_num > MAX_PARALLEL_NUM)
-//		throw exception(("specified fault number per simulation " + std::to_string(fault_num) +
-//			" exceeds the maximum value " + std::to_string(MAX_PARALLEL_NUM) + 
-//			". (run_random_FI_simulation)").c_str());
-//
-//	for (i = 0; i < sim_num; i++) {
-//		generate_input_vector(input_vector, Gen_mode::RANDOM);
-//		set_input_vector(input_vector);
-//
-//		inject_faults(fault_num, Gen_mode::RANDOM);
-//		_parallel_simulate_module(fm, fault_num);
-//		//TO DO remove
-//		error += _count_fault_res();
-//		total += fault_num;
-//	}
-//	cout << "error: " << error << endl;
-//	cout << "total: " << total << endl;
-//	cout << "ratio: " << (float)error / total << endl;
-//	return *this;
-//}
 
 void simulation::generate_input_vector(vector<bool> &input_vector, Gen_mode mode) {
 	int input_num = input_vector.size();

@@ -151,3 +151,22 @@ StatNode* simulation_evaluation::get_stat_node(string& node_name) {
 		return NULL;
 	return vStatNodeList[(*ite).second];
 }
+
+void simulation_evaluation::evaluate_fault_injection_results() {
+	vector<StatNode*>::const_iterator c_ite;
+	double ser = 0.0;
+	long error = 0;
+	long injection = 0;
+	for (c_ite = vStatNodeList.cbegin(); c_ite != vStatNodeList.cend(); c_ite++) {
+		if ((*c_ite)->uInjection == 0)
+			continue;
+		error += (*c_ite)->uPropagation;
+		injection += (*c_ite)->uInjection;
+		ser += (double)(*c_ite)->uPropagation / (*c_ite)->uInjection;
+	}
+	cout << "ERROR:\t\t" << error << endl;
+	cout << "injection:\t" << injection << endl;
+	cout << "ER:\t\t" << (float)error / injection << endl;
+	cout << "SER:\t\t" << ser << endl;
+	return;
+}
