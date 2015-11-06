@@ -675,7 +675,7 @@ namespace ALP2_TEST
 			bitset<MAX_PARALLEL_NUM>* vector = NULL;
 			sim.get_node_value("top_test.o_0", &value, &vector);
 			Assert::AreEqual(true, *value == ZERO);
-			Assert::AreEqual((unsigned long)4, vector->to_ulong());
+			Assert::AreEqual((unsigned long)1, vector->to_ulong());
 		}
 	};
 	TEST_CLASS(simulation_evaluation_test) {
