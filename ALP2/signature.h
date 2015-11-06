@@ -12,7 +12,8 @@ typedef struct {
 
 class signature
 {
-private:
+//TODO: private
+public:
 	vector<SignatureNode*>	vSigNodeList;
 	map<string, int>		mSigNode;
 	simulation*				sim;
@@ -26,6 +27,11 @@ public:
 public:
 	void					destroy();
 	bool					construct(simulation* tar_sim);
-	void					generate_signature();
+	void					generate_signature(bool random = true);
+	void					count_controllability();
+	void					analyse_observability(const vector<int> &tar_node_list, const vector<int> &exclude_node_list);
+	void					analyse_observability();
+	void					mark_fanin_nodes(const vector<int> &tar_node_list, vector<int> &fanin_node_list);
+	SignatureNode*			get_signature_node(string& node_name);
 };
 

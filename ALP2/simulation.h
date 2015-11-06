@@ -63,6 +63,7 @@ public:
 	void		get_node_value(string name, Wire_value **value, bitset<MAX_PARALLEL_NUM> **vector);
 	void		get_node_value(size_t index, Wire_value **value, bitset<MAX_PARALLEL_NUM> **vector);
 	vector<int>*	get_fault_injection_list();
+	int			get_node_index(string name);
 
 public:
 	static void generate_input_vector(vector<bool> &input_vector, Gen_mode mode);

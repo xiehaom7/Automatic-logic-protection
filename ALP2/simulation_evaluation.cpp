@@ -111,8 +111,8 @@ void simulation_evaluation::summarize_fault_injection_results(int fault_num) {
 		if (primary_output_list.find(vStatNodeList[index]->sName) != primary_output_list.end())
 			output_res |= *res;
 		(*value == ONE) 
-			? vStatNodeList[index]->uLogicOne += fault_num
-			: vStatNodeList[index]->uLogicZero += fault_num;
+			? vStatNodeList[index]->uLogicOne += 1
+			: vStatNodeList[index]->uLogicZero += 1;
 	}
 	
 	for (index = 0; index < (*fault_injeciton_list).size(); index++) {

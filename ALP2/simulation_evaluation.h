@@ -15,7 +15,8 @@ typedef struct {
 
 class simulation_evaluation
 {
-private:
+//TODO: private
+public:
 	vector<StatNode*>		vStatNodeList;
 	map<string, int>		mStatNode;
 	simulation*				sim;

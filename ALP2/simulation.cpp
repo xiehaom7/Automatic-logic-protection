@@ -441,3 +441,10 @@ simulation& simulation::run_fault_injection_simulation(
 	simulate_module(fm);
 	return *this;
 }
+
+int simulation::get_node_index(string name) {
+	std::map<string, int>::const_iterator ite = mapSimNodeLst.find(name);
+	if (ite == mapSimNodeLst.end())
+		return -1;
+	return ite->second;
+}
