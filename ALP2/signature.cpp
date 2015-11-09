@@ -122,7 +122,7 @@ void signature::analyse_observability(const vector<int> &tar_node_list, const ve
 	bitset<SIGNATURE_SIZE> observability_branch;
 	int current_fanin;
 	int fanin_size;
-	size_t i, j;
+	int i, j;
 
 	mark_fanin_nodes(tar_node_list, fanin_node_list);
 

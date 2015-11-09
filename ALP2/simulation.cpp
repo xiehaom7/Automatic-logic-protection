@@ -25,10 +25,10 @@ simulation::~simulation() {
 int simulation::construct_module(const vector<int> &input_list, 
 	vector<int> &output_list, int start_pos, module* tar_module, string prefix) {
 	if (tar_module == NULL)
-		throw exception("NULL module specified. (module_sim_lst_gen)");
+		throw exception("NULL module specified. (simulation::construct_module)");
 	if (tar_module->get_input_num() != input_list.size())
 		throw exception(("input numbers from target module " + tar_module->get_module_name() + 
-			" and input list not match. (module_sim_lst_gen)").c_str());
+			" and input list not match. (simulation::construct_module)").c_str());
 
 	vSimNodeLst.resize(vSimNodeLst.size() + tar_module->get_net_num() - 
 		tar_module->get_input_num() - tar_module->get_output_num());
@@ -48,13 +48,14 @@ int simulation::construct_module(const vector<int> &input_list,
 	int i;
 	if (!tar_module->get_topological_sequence(topological_node_list))
 		throw exception(("module " + tar_module->get_module_name() + 
-			" has loop. (module_sim_lst_gen)").c_str());
+			" has loop. (simulation::construct_module)").c_str());
 	for (i = 0; i < input_num; i++) {
 		current_net = tar_module->get_input_net(i);
 		mapSimNodeLst[prefix + "." + current_net->get_net_name()] = input_list[i];
 	}
 	for (ite = topological_node_list.cbegin(); ite != topological_node_list.cend(); ite++) {
 		input_index_list.clear();
+		output_index_list.clear();
 		current_net = tar_module->get_net(*ite);
 		if (current_net->get_is_input())
 			continue;

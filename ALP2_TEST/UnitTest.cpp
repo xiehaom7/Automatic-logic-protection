@@ -20,6 +20,8 @@
 #include "simulation_evaluation.cpp"
 #include "signature.h"
 #include "signature.cpp"
+#include "redundant_wire.h"
+#include "redundant_wire.cpp"
 #include <map>
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -1113,6 +1115,91 @@ namespace ALP2_TEST
 			Assert::AreEqual((unsigned long)128, (tar_node->vODCmask & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.o_0"));
 			Assert::AreEqual((unsigned long)255, (tar_node->vODCmask & mask).to_ulong());
+		}
+	};
+	TEST_CLASS(redundant_wire_test) {
+		TEST_METHOD(test_construct) {
+			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
+				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
+				"#AND3_X1\nA1 A2 A3\nZN");
+			cell_library*	cl;
+			cl = new cell_library("test_lib");
+			cl->parse_cc_file(ss);
+			string s_module = "module test (i_0, i_1, i_2, o_0, o_1);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0, o_1;\n"
+				"wire w_0, w_1;\n\n"
+				"AND2_X1 U1 (.A1(i_0), .A2(i_1), .ZN(w_0) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(i_2), .ZN(o_0) );\n"
+				"OR2_X1 U3 (.A1(i_0), .A2(i_1), .ZN(w_1) );\n"
+				"OR2_X1 U4 (.A1(w_1), .A2(i_2), .ZN(o_1) );\n"
+				"endmodule\n";
+			string  s_top_module = "module top_test (i_0, i_1, i_2, o_0, o_1);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0, o_1;\n"
+				"wire w_0;\n\n"
+				"test U1 (.i_0(i_0), .i_1(i_1), .i_2(i_2), .o_0(w_0), .o_1(o_1) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(o_1), .ZN(o_0) );\n"
+				"endmodule\n";
+			string s = s_module + "\n" + s_top_module + "\n";
+			design d(cl);
+			stringstream ss_module(s);
+			d.parse_design_file(ss_module);
+
+			redundant_wire rw;
+			set<string> list;
+			rw.construct(d.get_top_module());
+
+			Assert::AreEqual(string(""), rw.get_cell_type("top_test.i_0"));
+			list = rw.get_node_fanin("top_test.i_0");
+			Assert::AreEqual(true, list.empty());
+			list = rw.get_node_fanout("top_test.i_0");
+			Assert::AreEqual((size_t)2, list.size());
+			Assert::AreEqual(true, list.find("top_test.U1.w_0") != list.end());
+			Assert::AreEqual(true, list.find("top_test.U1.w_1") != list.end());
+
+			Assert::AreEqual(string(""), rw.get_cell_type("top_test.U1.i_0"));
+			list = rw.get_node_fanin("top_test.U1.i_0");
+			Assert::AreEqual(true, list.empty());
+			list = rw.get_node_fanout("top_test.U1.i_0");
+			Assert::AreEqual((size_t)2, list.size());
+			Assert::AreEqual(true, list.find("top_test.U1.w_0") != list.end());
+			Assert::AreEqual(true, list.find("top_test.U1.w_1") != list.end());
+
+			Assert::AreEqual(string("AND2_X1"), rw.get_cell_type("top_test.U1.w_0"));
+			list = rw.get_node_fanin("top_test.U1.w_0");
+			Assert::AreEqual((size_t)2, list.size());
+			Assert::AreEqual(true, list.find("top_test.i_0") != list.end());
+			Assert::AreEqual(true, list.find("top_test.i_1") != list.end());
+			list = rw.get_node_fanout("top_test.U1.w_0");
+			Assert::AreEqual((size_t)1, list.size());
+			Assert::AreEqual(true, list.find("top_test.U1.o_0") != list.end());
+
+			Assert::AreEqual(string("OR2_X1"), rw.get_cell_type("top_test.U1.o_1"));
+			list = rw.get_node_fanin("top_test.U1.o_1");
+			Assert::AreEqual((size_t)2, list.size());
+			Assert::AreEqual(true, list.find("top_test.U1.w_1") != list.end());
+			Assert::AreEqual(true, list.find("top_test.i_2") != list.end());
+			list = rw.get_node_fanout("top_test.U1.o_1");
+			Assert::AreEqual((size_t)1, list.size());
+			Assert::AreEqual(true, list.find("top_test.o_0") != list.end());
+
+			Assert::AreEqual(string("OR2_X1"), rw.get_cell_type("top_test.o_1"));
+			list = rw.get_node_fanin("top_test.o_1");
+			Assert::AreEqual((size_t)2, list.size());
+			Assert::AreEqual(true, list.find("top_test.U1.w_1") != list.end(), L"S1");
+			Assert::AreEqual(true, list.find("top_test.i_2") != list.end(), L"2");
+			list = rw.get_node_fanout("top_test.o_1");
+			Assert::AreEqual((size_t)1, list.size());
+			Assert::AreEqual(true, list.find("top_test.o_0") != list.end(), L"3");
+
+			Assert::AreEqual(string("AND2_X1"), rw.get_cell_type("top_test.o_0"));
+			list = rw.get_node_fanin("top_test.o_0");
+			Assert::AreEqual((size_t)2, list.size());
+			Assert::AreEqual(true, list.find("top_test.U1.o_1") != list.end(), L"S1");
+			Assert::AreEqual(true, list.find("top_test.U1.o_0") != list.end(), L"2");
+			list = rw.get_node_fanout("top_test.o_0");
+			Assert::AreEqual(true, list.empty());
 		}
 	};
 }
