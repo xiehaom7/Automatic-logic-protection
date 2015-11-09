@@ -60,7 +60,6 @@ namespace ALP2_TEST
 	TEST_CLASS(cell_utility_test)
 	{
 	public:
-		
 		TEST_METHOD(test_next_value)
 		{
 			bitset<MAX_CELL_INPUTS_X2> vector;
@@ -87,7 +86,6 @@ namespace ALP2_TEST
 			cell_utility::next_value(vector, bit_num);
 			Assert::AreEqual((unsigned long)0, vector.to_ulong());
 		}
-
 		TEST_METHOD(test_implication_verify)
 		{
 			bitset<MAX_CELL_INPUTS_X2> mask("1111111111111111"), 
@@ -100,7 +98,6 @@ namespace ALP2_TEST
 			req[0] = 0, req[2] = 1;
 			Assert::AreEqual(false, cell_utility::implication_verify(mask, curr, req));
 		}
-
 		TEST_METHOD(test_create_mask)
 		{
 			bitset<MAX_CELL_INPUTS_X2> mask, curr("0000000000000000");
@@ -118,7 +115,6 @@ namespace ALP2_TEST
 			cell_utility::create_mask(curr, mask, bit_num);
 			Assert::AreEqual(string("1111111111110000"), mask.to_string());
 		}
-
 		TEST_METHOD(test_check_all_known) {
 			bitset<MAX_CELL_INPUTS_X2> curr("0000000000000000");
 			int bit_num = 2;
@@ -129,7 +125,6 @@ namespace ALP2_TEST
 			curr[0] = 0;
 			Assert::AreEqual(false, cell_utility::check_all_known(curr, bit_num));
 		}
-
 		TEST_METHOD(test_forward_ref) {
 			bitset<MAX_CELL_INPUTS_X2> curr("0000000000000000");
 			vector<bitset<MAX_CELL_INPUTS_X2>> cc_array;
@@ -144,7 +139,6 @@ namespace ALP2_TEST
 			curr[0] = 0, curr[1] = 0, curr[3] = 1;
 			Assert::AreEqual(false, cell_utility::forward_ref(curr, cc_array), L"0000000000001000");
 		}
-
 		TEST_METHOD(test_backward_ref) {
 			bitset<MAX_CELL_INPUTS_X2> curr("0000000000000000"),
 				mask, res;
@@ -155,7 +149,7 @@ namespace ALP2_TEST
 
 			cell_utility::create_mask(curr, mask, bit_num);
 			res = cell_utility::backward_ref(curr, mask, cc_array);
-			Assert::AreEqual(string("0000000000000000"), res.to_string());
+			Assert::AreEqual(string("0000000000000011"), res.to_string());
 			curr[0] = 1;
 			cell_utility::create_mask(curr, mask, bit_num);
 			res = cell_utility::backward_ref(curr, mask, cc_array);
@@ -177,7 +171,6 @@ namespace ALP2_TEST
 			res = cell_utility::backward_ref(curr, mask, cc_array);
 			Assert::AreEqual(string("0000000000001011"), res.to_string());
 		}
-
 		TEST_METHOD(test_vector_to_int) {
 			bitset<MAX_CELL_INPUTS_X2> v("0000000000001100");
 			int bit_num = 2;
@@ -190,7 +183,6 @@ namespace ALP2_TEST
 			v[0] = 0, v[2] = 1;
 			Assert::AreEqual(2, cell_utility::vector_to_int(v, bit_num));
 		}
-
 		TEST_METHOD(test_int_to_vector) {
 			bitset<MAX_CELL_INPUTS_X2> v;
 			int bit_num = 2;
@@ -233,7 +225,6 @@ namespace ALP2_TEST
 			string_utility::read_space(test, pos);
 			Assert::AreEqual((size_t)4, pos, L"test 'A \\r\\n'A");
 		}
-
 		TEST_METHOD(test_read_next_word) {
 			string test = "", res;
 			size_t pos = 0;
@@ -271,7 +262,6 @@ namespace ALP2_TEST
 			Assert::AreEqual((size_t)3, pos, L"test 'A_1@ \\r\\n'A");
 			Assert::AreEqual(string("A_1"), res, L"test 'A_1@ \\r\\n'A");
 		}
-
 		TEST_METHOD(test_test_within) {
 			string s = "", test = "";
 			size_t pos = 0;
@@ -343,7 +333,6 @@ namespace ALP2_TEST
 			Assert::AreEqual(string("0000000000111000"), p_cell->co_array[2][0].to_string(), L"AOI211_X1 co array[2][0] not match.");
 			Assert::AreEqual(string("0000000000110100"), p_cell->co_array[3][0].to_string(), L"AOI211_X1 co array[3][0] not match.");
 		}
-
 		TEST_METHOD(test_parse_rw_op) {
 			cell_library cl("test_lib");
 			stringstream ss_setup("#AND2_X1\nA1 A2\nZN\n0100\n1000\n#BUF_X1\nA\nZ\n00\n00");
@@ -427,7 +416,6 @@ namespace ALP2_TEST
 			Assert::AreEqual(true, m.check_module(), L"check_module not match");
 			delete cl;
 		}
-
 		TEST_METHOD(test_check_module) {
 			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
 				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
@@ -461,7 +449,6 @@ namespace ALP2_TEST
 			Assert::IsFalse(m1.check_module());
 			Assert::IsFalse(!m2.check_module());
 		}
-
 		TEST_METHOD(test_get_topological_sequence) {
 			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
 				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
@@ -1200,6 +1187,117 @@ namespace ALP2_TEST
 			Assert::AreEqual(true, list.find("top_test.U1.o_0") != list.end(), L"2");
 			list = rw.get_node_fanout("top_test.o_0");
 			Assert::AreEqual(true, list.empty());
+		}
+		TEST_METHOD(test_backward_justification) {
+			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
+				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
+				"#AND3_X1\nA1 A2 A3\nZN");
+			cell_library*	cl;
+			cl = new cell_library("test_lib");
+			cl->parse_cc_file(ss);
+			string s_module = "module test (i_0, i_1, i_2, o_0, o_1);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0, o_1;\n"
+				"wire w_0, w_1;\n\n"
+				"AND2_X1 U1 (.A1(i_0), .A2(i_1), .ZN(w_0) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(i_2), .ZN(o_0) );\n"
+				"OR2_X1 U3 (.A1(i_0), .A2(i_1), .ZN(w_1) );\n"
+				"OR2_X1 U4 (.A1(w_1), .A2(i_2), .ZN(o_1) );\n"
+				"endmodule\n";
+			string  s_top_module = "module top_test (i_0, i_1, i_2, o_0);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0;\n"
+				"wire w_0, w_1;\n\n"
+				"test U1 (.i_0(i_0), .i_1(i_1), .i_2(i_2), .o_0(w_0), .o_1(w_1) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(w_1), .ZN(o_0) );\n"
+				"endmodule\n";
+			string s = s_module + "\n" + s_top_module + "\n";
+			design d(cl);
+			stringstream ss_module(s);
+			d.parse_design_file(ss_module);
+
+			redundant_wire rw;
+			set<string> list;
+			rw.construct(d.get_top_module());
+
+			Implication_list implication_list;
+			map<string, Implication_comb>::iterator ite;
+			implication_list.ori.index = rw.get_node_index("top_test.U1.o_1");
+			implication_list.ori.val = ZERO;
+			rw.backward_justification(implication_list);
+			Assert::AreEqual((size_t)4, implication_list.imp_results.size());
+			ite = implication_list.imp_results.find(string("top_test.i_2"));
+			Assert::AreEqual(true, ite != implication_list.imp_results.end());
+			Assert::AreEqual(true, (*ite).second.val == ZERO);
+			ite = implication_list.imp_results.find("top_test.U1.w_1");
+			Assert::AreEqual(true, ite != implication_list.imp_results.end());
+			Assert::AreEqual(true, (*ite).second.val == ZERO);
+			ite = implication_list.imp_results.find("top_test.i_1");
+			Assert::AreEqual(true, ite != implication_list.imp_results.end());
+			Assert::AreEqual(true, (*ite).second.val == ZERO);
+			ite = implication_list.imp_results.find("top_test.i_0");
+			Assert::AreEqual(true, ite != implication_list.imp_results.end());
+			Assert::AreEqual(true, (*ite).second.val == ZERO);
+		}
+		TEST_METHOD(test_direct_justification) {
+			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
+				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
+				"#AND3_X1\nA1 A2 A3\nZN");
+			cell_library*	cl;
+			cl = new cell_library("test_lib");
+			cl->parse_cc_file(ss);
+			string s_module = "module test (i_0, i_1, i_2, o_0, o_1);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0, o_1;\n"
+				"wire w_0, w_1;\n\n"
+				"AND2_X1 U1 (.A1(i_0), .A2(i_1), .ZN(w_0) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(i_2), .ZN(o_0) );\n"
+				"OR2_X1 U3 (.A1(i_0), .A2(i_1), .ZN(w_1) );\n"
+				"OR2_X1 U4 (.A1(w_1), .A2(i_2), .ZN(o_1) );\n"
+				"endmodule\n";
+			string  s_top_module = "module top_test (i_0, i_1, i_2, o_0);\n"
+				"input i_0, i_1, i_2;\n"
+				"output o_0;\n"
+				"wire w_0, w_1;\n\n"
+				"test U1 (.i_0(i_0), .i_1(i_1), .i_2(i_2), .o_0(w_0), .o_1(w_1) );\n"
+				"AND2_X1 U2 (.A1(w_0), .A2(w_1), .ZN(o_0) );\n"
+				"endmodule\n";
+			string s = s_module + "\n" + s_top_module + "\n";
+			design d(cl);
+			stringstream ss_module(s);
+			d.parse_design_file(ss_module);
+
+			redundant_wire rw;
+			set<string> list;
+			rw.construct(d.get_top_module());
+
+			Implication_list implication_list;
+			map<string, Implication_comb>::iterator ite;
+			implication_list.ori.index = rw.get_node_index("top_test.U1.o_1");
+			implication_list.ori.val = ZERO;
+			rw.direct_justification(implication_list);
+			Assert::AreEqual((size_t)7, implication_list.imp_results.size());
+			ite = implication_list.imp_results.find(string("top_test.i_2"));
+			Assert::AreEqual(true, ite != implication_list.imp_results.end());
+			Assert::AreEqual(true, (*ite).second.val == ZERO);
+			ite = implication_list.imp_results.find("top_test.U1.w_1");
+			Assert::AreEqual(true, ite != implication_list.imp_results.end());
+			Assert::AreEqual(true, (*ite).second.val == ZERO);
+			ite = implication_list.imp_results.find("top_test.i_1");
+			Assert::AreEqual(true, ite != implication_list.imp_results.end());
+			Assert::AreEqual(true, (*ite).second.val == ZERO);
+			ite = implication_list.imp_results.find("top_test.i_0");
+			Assert::AreEqual(true, ite != implication_list.imp_results.end());
+			Assert::AreEqual(true, (*ite).second.val == ZERO);
+			ite = implication_list.imp_results.find("top_test.U1.w_0");
+			Assert::AreEqual(true, ite != implication_list.imp_results.end());
+			Assert::AreEqual(true, (*ite).second.val == ZERO);
+			ite = implication_list.imp_results.find("top_test.U1.o_0");
+			Assert::AreEqual(true, ite != implication_list.imp_results.end());
+			Assert::AreEqual(true, (*ite).second.val == ZERO);
+			ite = implication_list.imp_results.find("top_test.o_0");
+			Assert::AreEqual(true, ite != implication_list.imp_results.end());
+			Assert::AreEqual(true, (*ite).second.val == ZERO);
 		}
 	};
 }

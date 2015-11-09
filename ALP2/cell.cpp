@@ -35,7 +35,7 @@ void cell::generate_backward_ref_table() {
 		cell_utility::create_mask(curr, mask, input_num);
 		index = curr.to_ulong();
 		
-		if (cell_utility::check_all_known(curr, input_num)) {
+		if (!cell_utility::check_all_known(curr, input_num)) {
 			res = cell_utility::backward_ref(curr, mask, cc1_array);
 			if (!res.none())
 				one_backward_ref_table[index] = res;

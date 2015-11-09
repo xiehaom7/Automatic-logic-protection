@@ -4,6 +4,7 @@
 #include "signature.h"
 #include <set>
 #include <algorithm>
+#include <valarray>
 
 typedef struct {
 	int							index;
@@ -30,8 +31,8 @@ typedef struct {
 }Implication_pair;
 
 typedef struct {
-	Implication_comb			ori;
-	vector<Implication_comb>	imp_results;
+	Implication_comb				ori;
+	map<string, Implication_comb>	imp_results;
 }Implication_list;
 
 typedef struct {
@@ -43,8 +44,6 @@ typedef struct {
 	/*StatNode					strStat;*/
 }RWNode;
 
-
-
 class redundant_wire
 {
 private:
@@ -53,14 +52,14 @@ private:
 	map<string, int>			mapRWNodeList;
 	vector<int>					vPrimaryInputList;
 	vector<int>					vPrimaryOutputList;
-	vector<vector<bool>>		matrixImplication;
-	/*vector<vector<bool>>		matrixImplicationScreen;*/
+	valarray<bool>				matrixImplication;
+	valarray<bool>				matrixImplicationScreen;
 	vector<list<Implication_comb>>	vSimpleIndirectImplication;
 	vector<list<Implication_comb>>	vIndirectImplication;
 	vector<set<int>>			vNodeFaninSet;
 	vector<set<int>>			vNodeFanoutSet;
 	/*vector<map<int, set<int>>>	vNodeDominatorSet;*/
-	/*list<int>					lModificationIndexLst;*/
+	list<int>					lModificationIndexLst;
 
 	unsigned					rw_wire_added_counter;
 	unsigned					rw_gate_added_counter;
@@ -70,14 +69,48 @@ public:
 public:
 	void						destroy();
 	bool						construct(module* tar_module);
-	int							get_node_index(string &node_name);
-	set<string>				get_node_fanin(string node_name);
-	set<string>				get_node_fanout(string node_name);
+	int							get_node_index(string node_name);
+	string						get_node_name(int index);
+	set<string>					get_node_fanin(string node_name);
+	set<string>					get_node_fanout(string node_name);
 	string						get_cell_type(string node_name);
+	void						set_value(int index, Wire_value value);
+	void						set_X();
 private:
 	RWNode*						_create_RW_node(net* current_net, string &prefix, 
 		vector<int> &i_list);
-	int							construct_module(const vector<int> &input_list,
+	int							_construct_module(const vector<int> &input_list,
 		vector<int> &output_list, int start_pos, module* tar_module, string& prefix);
+
+//methods for initialization
+	void						_setup_indirect_implication_vector();
+	void						_setup_simple_indirect_implication_vector();
+	void						_setup_implication_matrix();
+	void						_setup_implication_screen_matrix();
+	void						_setup_fanin_fanout_set();
+	/*void						_setup_dominator_set();*/
+
+//methods for implication matrix generation
+	bool						_implication_verify(bitset<MAX_CELL_INPUTS_X2> mask, 
+		bitset<MAX_CELL_INPUTS_X2> curr, const bitset<MAX_CELL_INPUTS_X2> &req) const;
+	void						_backward_justify(int tar_index, stack<int> &stack_index);
+	void						_lookup_backward_table(unsigned index, int tar_index, map<unsigned,
+		bitset < MAX_CELL_INPUTS_X2 >> &table, stack<int> &stack_index);
+	void redundant_wire::_lookup_forward_table(unsigned index, int tar_index, map<unsigned,
+		bool> &table, stack<int> &stack_index);
+	unsigned					_calculate_inputs_index(int tar_index);
+	void						_forward_justify(int tar_index, stack<int> &stack_index);
+public:
+	void						justification(Implication_list &imp_list);
+	void						justification_full(Implication_list &imp_list, 
+		set<Implication_comb, Implication_comb_compare> &update_set);
+	void						direct_justification(Implication_list &imp_list);
+	void						backward_justification(Implication_list &imp_list);
 };
 
+inline	bool	redundant_wire::_implication_verify(bitset<MAX_CELL_INPUTS_X2> mask, 
+	bitset<MAX_CELL_INPUTS_X2> curr, const bitset<MAX_CELL_INPUTS_X2> &req) const {
+	//mask with value 1 : bits already known
+	curr.flip();
+	return (mask & curr & req).none();
+}

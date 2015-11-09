@@ -65,7 +65,7 @@ bitset<MAX_CELL_INPUTS_X2> cell_utility::backward_ref(const bitset<MAX_CELL_INPU
 	res &= mask;
 
 	for (c_ite = cc_array.cbegin(); c_ite != cc_array.cend(); c_ite++) {
-		if (cell_utility::implication_verify(mask, curr, *c_ite)) {
+		if (cell_utility::implication_verify(mask, curr, *c_ite) || mask.all()) {
 			res &= (*c_ite);
 			update_flag = true;
 		}

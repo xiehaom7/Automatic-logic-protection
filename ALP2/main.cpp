@@ -18,7 +18,7 @@ int main() {
 	clock_t start, finish;
 	double totaltime;
 
-	string s_module = "module test (i_0, i_1, i_2, o_0, o_1);\n"
+	/*string s_module = "module test (i_0, i_1, i_2, o_0, o_1);\n"
 		"input i_0, i_1, i_2;\n"
 		"output o_0, o_1;\n"
 		"wire w_0, w_1;\n\n"
@@ -35,16 +35,16 @@ int main() {
 		"AND2_X1 U2 (.A1(w_0), .A2(o_1), .ZN(o_0) );\n"
 		"endmodule\n";
 	string s = s_module + "\n" + s_top_module + "\n";
-	stringstream ss(s);
+	stringstream ss(s);*/
 
-	///*ifstream pFile("D:\\Dropbox\\Public\\Programs\\C\\ALP\\ALP\\s386.v");
-	//stringstream ss;
-	//assert(pFile.is_open());
-	//ss << pFile.rdbuf();*/
+	ifstream pFile("D:\\Dropbox\\Public\\Programs\\C\\ALP\\ALP\\s386.v");
+	stringstream ss;
+	assert(pFile.is_open());
+	ss << pFile.rdbuf();
 	design d(&cl);
 	d.parse_design_file(ss);
-	simulation sim;
-	sim.construct(d.get_top_module());
+	/*simulation sim;
+	sim.construct(d.get_top_module());*/
 	
 	try {
 		start = clock();
