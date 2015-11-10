@@ -21,8 +21,7 @@ void redundant_wire::destroy() {
 	vPrimaryOutputList.clear();
 	matrixImplication.resize(0);
 	matrixImplicationScreen.resize(0);
-	vSimpleIndirectImplication.clear();
-	vIndirectImplication.clear();
+	vImplication.clear();
 	vNodeFaninSet.clear();
 	vNodeFanoutSet.clear();
 
@@ -163,8 +162,7 @@ bool redundant_wire::construct(module* tar_module) {
 				cap++;
 		vRWNodeList.resize(cap);
 
-		_setup_simple_indirect_implication_vector();
-		_setup_indirect_implication_vector();
+		_setup_implication_vector();
 		_setup_implication_matrix();
 		_setup_implication_screen_matrix();
 		_setup_fanin_fanout_set();
@@ -198,7 +196,7 @@ int redundant_wire::get_node_index(string node_name) {
 }
 
 string redundant_wire::get_node_name(int index) {
-	if (index < 0 || index >= vRWNodeList.size())
+	if (index < 0 || (unsigned)index >= vRWNodeList.size())
 		throw exception(("index " + std::to_string(index) + " exceeds range (0 : " + 
 			std::to_string(vRWNodeList.size()) + "). (redundant_wire::get_node_name)").c_str());
 	return vRWNodeList[index]->sName;
@@ -239,26 +237,21 @@ string redundant_wire::get_cell_type(string node_name) {
 	return vRWNodeList[index]->pCell->cell_name;
 }
 
-void redundant_wire::_setup_simple_indirect_implication_vector() {
-	unsigned node_size_x2 = vRWNodeList.size() * 2;
-	vector<list<Implication_comb>>::iterator ite;
-
-	for (ite = vSimpleIndirectImplication.begin(); 
-		ite != vSimpleIndirectImplication.end(); ite++)
-		(*ite).clear();
-
-	vSimpleIndirectImplication.resize(node_size_x2);
-	return;
+int redundant_wire::get_implication_num() {
+	if (matrixImplication.size() == 0)
+		return -1;
+	return std::count(std::begin(matrixImplication), 
+		std::end(matrixImplication), true);
 }
 
-void redundant_wire::_setup_indirect_implication_vector() {
+void redundant_wire::_setup_implication_vector() {
 	unsigned node_size_x2 = vRWNodeList.size() * 2;
 	vector<list<Implication_comb>>::iterator ite;
 
-	for (ite = vIndirectImplication.begin(); ite != vIndirectImplication.end(); ite++)
+	for (ite = vImplication.begin(); ite != vImplication.end(); ite++)
 		(*ite).clear();
 
-	vIndirectImplication.resize(node_size_x2);
+	vImplication.resize(node_size_x2);
 	return;
 }
 
@@ -436,6 +429,289 @@ void redundant_wire::direct_justification(Implication_list &imp_list) {
 				else {
 					_backward_justify(current_fanout_index, stack_index);
 				}
+			}
+		}
+	}
+	return;
+}
+
+void redundant_wire::justification(Implication_list &imp_list) {
+	int tar_index = imp_list.ori.index;
+	Wire_value tar_value = imp_list.ori.val;
+	size_t size = vRWNodeList.size();
+	int matrix_index;
+	int current_index, current_fanout_index;
+	Wire_value current_value;
+	stack<int> stack_index;
+	int i;
+	int fanout_net_num;
+
+	set_X();
+
+	this->set_value(tar_index, tar_value);
+	stack_index.push(tar_index);
+
+	while (!stack_index.empty()) {
+		current_index = stack_index.top();
+		current_value = vRWNodeList[current_index]->eValue;
+		stack_index.pop();
+
+		if (current_index != tar_index) {
+			Implication_comb new_ic;
+			new_ic.index = current_index;
+			new_ic.val = vRWNodeList[current_index]->eValue;
+			imp_list.imp_results[vRWNodeList[current_index]->sName] = new_ic;
+		}
+
+		//check if there are any implications from fanin nodes
+		matrix_index = (current_value == ZERO) ? current_index * 2 + 1 : current_index * 2;
+		valarray<bool> matrix_slice = matrixImplication[std::slice(matrix_index, size * 2, size * 2)];
+		for (i = 0; (unsigned)i < size; i++) {
+			if (matrix_slice[i * 2] && vRWNodeList[i]->eValue == X) {
+				this->set_value(i, ONE);
+				stack_index.push(i);
+			}
+			if (matrix_slice[i * 2 + 1] && vRWNodeList[i]->eValue == X) {
+				this->set_value(i, ZERO);
+				stack_index.push(i);
+			}
+		}
+
+		if (!vRWNodeList[current_index]->vFanin.empty()) {
+			_backward_justify(current_index, stack_index);
+		}
+
+		if (!vRWNodeList[current_index]->vFanout.empty()) {
+			fanout_net_num = vRWNodeList[current_index]->vFanout.size();
+			for (i = 0; i < fanout_net_num; i++) {
+				current_fanout_index = vRWNodeList[current_index]->vFanout[i];
+
+				if (vRWNodeList[current_fanout_index]->eValue == X) {
+					_forward_justify(current_fanout_index, stack_index);
+				}
+				else {
+					_backward_justify(current_fanout_index, stack_index);
+				}
+			}
+		}
+	}
+	return;
+}
+
+void redundant_wire::justification_full(Implication_list &imp_list, set<Implication_comb, Implication_comb_compare> &update_stack) {
+	int tar_index = imp_list.ori.index;
+	Wire_value tar_value = imp_list.ori.val;
+	size_t size = vRWNodeList.size();
+
+	int matrix_index, inversed_left, inversed_right;
+	int current_index, current_fanout_index;
+	Wire_value current_value;
+	stack<int> stack_index;
+	unsigned i;
+	unsigned fanout_net_num;
+
+	set_X();
+
+	this->set_value(tar_index, tar_value);
+	stack_index.push(tar_index);
+
+	while (!stack_index.empty()) {
+		current_index = stack_index.top();
+		current_value = vRWNodeList[current_index]->eValue;
+		stack_index.pop();
+
+		if (current_index != tar_index) {
+			Implication_comb new_ic;
+			new_ic.index = current_index;
+			new_ic.val = vRWNodeList[current_index]->eValue;
+			imp_list.imp_results[vRWNodeList[current_index]->sName] = new_ic;
+
+			inversed_left = (new_ic.val == ZERO) ? new_ic.index * 2 + 1 : new_ic.index * 2;
+			inversed_right = (tar_value == ZERO) ? tar_index * 2 + 1 : tar_index * 2;
+			if (!matrixImplication[inversed_left * size * 2 + inversed_right]) {
+				matrixImplication[inversed_left * size * 2 + inversed_right] = true;
+				Implication_comb update_comb;
+				update_comb.index = new_ic.index;
+				update_comb.val = (tar_value == ZERO) ? ONE : ZERO;
+				update_stack.insert(update_comb);
+			}
+		}
+
+		//check if there are any implications from fanin nodes
+		matrix_index = (current_value == ZERO) ? current_index * 2 + 1 : current_index * 2;
+		valarray<bool> matrix_slice = matrixImplication[std::slice(matrix_index, size * 2, size * 2)];
+		for (i = 0; i < size; i++) {
+			if (matrix_slice[i * 2] && vRWNodeList[i]->eValue == X) {
+				this->set_value(i, ONE);
+				stack_index.push(i);
+			}
+			if (matrix_slice[i * 2 + 1] && vRWNodeList[i]->eValue == X) {
+				this->set_value(i, ZERO);
+				stack_index.push(i);
+			}
+		}
+
+		if (!vRWNodeList[current_index]->vFanin.empty()) {
+			_backward_justify(current_index, stack_index);
+		}
+
+		if (!vRWNodeList[current_index]->vFanout.empty()) {
+			fanout_net_num = vRWNodeList[current_index]->vFanout.size();
+			for (i = 0; i < fanout_net_num; i++) {
+				current_fanout_index = vRWNodeList[current_index]->vFanout[i];
+
+				if (vRWNodeList[current_fanout_index]->eValue == X) {
+					_forward_justify(current_fanout_index, stack_index);
+				}
+				else {
+					_backward_justify(current_fanout_index, stack_index);
+				}
+			}
+		}
+	}
+	return;
+}
+
+void redundant_wire::_matrix_generator(Implicaton_method method) {
+	Implication_list new_imp_list;
+	map<string, Implication_comb>::const_iterator c_ite;
+	size_t size = vRWNodeList.size();
+	unsigned i;
+
+	for (i = 0; i < size; i++) {
+		new_imp_list.ori.index = i;
+		new_imp_list.ori.val = ZERO;
+		new_imp_list.imp_results.clear();
+
+		switch (method) {
+		case BACKWARD:
+			backward_justification(new_imp_list);
+			break;
+		case DIRECT:
+			direct_justification(new_imp_list);
+			break;
+		case INDIRECT_LOW:
+			justification(new_imp_list);
+			break;
+		default:
+			throw exception("unknown method. (redundant_wire::_matrix_generator)\n");
+		}
+		
+		for (c_ite = new_imp_list.imp_results.cbegin(); c_ite != new_imp_list.imp_results.cend(); c_ite++) {
+			((*c_ite).second.val == ZERO)
+				? matrixImplication[i * 2 * size * 2 + (*c_ite).second.index * 2] = true
+				: matrixImplication[i * 2 * size * 2 + (*c_ite).second.index * 2 + 1] = true;
+		}
+
+		new_imp_list.ori.index = i;
+		new_imp_list.ori.val = ONE;
+		new_imp_list.imp_results.clear();
+
+		switch (method) {
+		case BACKWARD:
+			backward_justification(new_imp_list);
+			break;
+		case DIRECT:
+			direct_justification(new_imp_list);
+			break;
+		case INDIRECT_LOW:
+			justification(new_imp_list);
+			break;
+		default:
+			throw exception("unknown method. (redundant_wire::_matrix_generator)\n");
+		}
+		for (c_ite = new_imp_list.imp_results.cbegin(); c_ite != new_imp_list.imp_results.cend(); c_ite++) {
+			((*c_ite).second.val == ZERO)
+				? matrixImplication[(i * 2 + 1) * size * 2 + (*c_ite).second.index * 2] = true
+				: matrixImplication[(i * 2 + 1) * size * 2 + (*c_ite).second.index * 2 + 1] = true;
+		}
+	}
+	_generate_implication_vector();
+	return;
+}
+
+void redundant_wire::implication_matrix_generator_backward() {
+	_matrix_generator(BACKWARD);
+	return;
+}
+
+void redundant_wire::implication_matrix_generator_direct() {
+	_matrix_generator(DIRECT);
+	return;
+}
+
+void redundant_wire::implication_matrix_generator() {
+	_matrix_generator(INDIRECT_LOW);
+	return;
+}
+
+void redundant_wire::implication_matrix_generator_full() {
+	Implication_list new_imp_list;
+	Implication_comb new_ic;
+	map<string, Implication_comb>::const_iterator c_ite;
+	set<Implication_comb, Implication_comb_compare> update_set;
+	size_t size = vRWNodeList.size();
+	unsigned i;
+	int matrix_index;
+
+	for (i = 0; i < size; i++) {
+		new_ic.index = i;
+		new_ic.val = ZERO;
+		update_set.insert(new_ic);
+
+		new_ic.val = ONE;
+		update_set.insert(new_ic);
+	}
+
+	while (!update_set.empty()) {
+		new_imp_list.ori.index = (*update_set.begin()).index;
+		new_imp_list.ori.val = (*update_set.begin()).val;
+		new_imp_list.imp_results.clear();
+		update_set.erase(update_set.begin());
+		matrix_index = (new_imp_list.ori.val == ZERO) 
+			? new_imp_list.ori.index * 2 
+			: new_imp_list.ori.index * 2 + 1;
+
+		justification_full(new_imp_list, update_set);
+		for (c_ite = new_imp_list.imp_results.cbegin(); c_ite != new_imp_list.imp_results.cend(); c_ite++) {
+			((*c_ite).second.val == ZERO) 
+				? matrixImplication[matrix_index * size * 2 + (*c_ite).second.index * 2] = true 
+				: matrixImplication[matrix_index * size * 2 + (*c_ite).second.index * 2 + 1] = true;
+		}
+	}
+	_generate_implication_vector();
+	return;
+}
+
+void redundant_wire::_generate_implication_vector() {
+	size_t size = vRWNodeList.size();
+	unsigned i, j;
+	Implication_comb new_comb;
+	int index;
+
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size; j++) {
+			index = i * 2;
+			if (matrixImplication[index * size * 2 + j * 2]) {
+				new_comb.index = j;
+				new_comb.val = ZERO;
+				vImplication[index].push_back(new_comb);
+			}
+			else if (matrixImplication[index * size * 2 + j * 2 + 1]) {
+				new_comb.index = j;
+				new_comb.val = ONE;
+				vImplication[index].push_back(new_comb);
+			}
+			index = i * 2 + 1;
+			if (matrixImplication[index * size * 2 + j * 2]) {
+				new_comb.index = j;
+				new_comb.val = ZERO;
+				vImplication[index].push_back(new_comb);
+			}
+			else if (matrixImplication[index * size * 2 + j * 2 + 1]) {
+				new_comb.index = j;
+				new_comb.val = ONE;
+				vImplication[index].push_back(new_comb);
 			}
 		}
 	}

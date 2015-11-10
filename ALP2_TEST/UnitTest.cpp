@@ -23,6 +23,7 @@
 #include "redundant_wire.h"
 #include "redundant_wire.cpp"
 #include <map>
+#include <list>
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace ALP2_TEST
@@ -1298,6 +1299,306 @@ namespace ALP2_TEST
 			ite = implication_list.imp_results.find("top_test.o_0");
 			Assert::AreEqual(true, ite != implication_list.imp_results.end());
 			Assert::AreEqual(true, (*ite).second.val == ZERO);
+		}
+		TEST_METHOD(test_backward_justification_result) {
+			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
+				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
+				"#NAND2_X1\nA1 A2\nZN\n0010 0001\n1100\n"
+				"#NOR2_X1\nA1 A2\nZN\n0011\n1000 0100\n"
+				"#NOR3_X1\nA1 A2 A3\nZN\n000111\n100000 010000 001000\n"
+				"#INV_X1\nA\nZN\n01\n10\n");
+			cell_library*	cl;
+			cl = new cell_library("test_lib");
+			cl->parse_cc_file(ss);
+			string  s_top_module = "module top_test (a, b, c, d, e, f, h, o);\n"
+				"input a, b, c, d, e, f, h;\n"
+				"output o;\n"
+				"wire w1, w2, w3, w4, w5, w6, w7, w8, w9;\n\n"
+				"OR2_X1 U1 (.A1(a), .A2(b), .ZN(w1));\n"
+				"OR2_X1 U2 (.A1(b), .A2(c), .ZN(w2));\n"
+				"OR2_X1 U3 (.A1(d), .A2(e), .ZN(w3));\n"
+				"NAND2_X1 U4 (.A1(e), .A2(f), .ZN(w4));\n"
+				"INV_X1 U5(.A(h), .ZN(w5));\n"
+				"AND2_X1 U6 (.A1(w1), .A2(w2), .ZN(w6));\n"
+				"AND2_X1 U7 (.A1(w4), .A2(w5), .ZN(w7));\n"
+				"NOR3_X1 U8 (.A1(w6), .A2(w3), .A3(w7) .ZN(w8));\n"
+				"OR2_X1 U9 (.A1(w7), .A2(h), .ZN(w9));\n"
+				"AND2_X1 U10 (.A1(w8), .A2(w9), .ZN(o));\n"
+				"endmodule\n";
+			string s = s_top_module;
+			design d(cl);
+			stringstream ss_module(s);
+			d.parse_design_file(ss_module);
+			
+			simulation sim;
+			sim.construct(d.get_top_module());
+			signature sig;
+			sig.construct(&sim);
+			sig.generate_signature(false);
+
+			redundant_wire rw;
+			rw.construct(d.get_top_module());
+			rw.implication_matrix_generator_backward();
+			vector<list<Implication_comb>> vector_implication = rw.get_implication_list();
+			size_t index, left_index, right_index;
+			SignatureNode *left_node, *right_node;
+			list<Implication_comb>::const_iterator l_ite;
+
+			for (index = 0; index < vector_implication.size(); index += 2) {
+				left_index = index / 2;
+				left_node = sig.get_signature_node(rw.get_node_name(left_index));
+				for (l_ite = vector_implication[index].cbegin(); 
+					l_ite != vector_implication[index].cend(); l_ite++) {
+					right_index = (*l_ite).index;
+					right_node = sig.get_signature_node(rw.get_node_name(right_index));
+					if ((*l_ite).val == ZERO) {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig | right_node->vSig));
+						//Logger::WriteMessage((left_node->sName + "\t0\t" + right_node->sName + "\t0\n").c_str());
+					}
+					else {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig | ~right_node->vSig));
+						//Logger::WriteMessage((left_node->sName + "\t0\t" + right_node->sName + "\t1\n").c_str());
+					}
+				}
+				for (l_ite = vector_implication[index + 1].cbegin();
+				l_ite != vector_implication[index + 1].cend(); l_ite++) {
+					right_index = (*l_ite).index;
+					right_node = sig.get_signature_node(rw.get_node_name(right_index));
+					if ((*l_ite).val == ZERO) {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig & ~right_node->vSig));
+						//Logger::WriteMessage((left_node->sName + "\t1\t" + right_node->sName + "\t0\n").c_str());
+					}
+					else {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig & right_node->vSig));
+						//Logger::WriteMessage((left_node->sName + "\t1\t" + right_node->sName + "\t1\n").c_str());
+					}
+				}
+			}
+		}
+		TEST_METHOD(test_direct_justification_result) {
+			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
+				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
+				"#NAND2_X1\nA1 A2\nZN\n0010 0001\n1100\n"
+				"#NOR2_X1\nA1 A2\nZN\n0011\n1000 0100\n"
+				"#NOR3_X1\nA1 A2 A3\nZN\n000111\n100000 010000 001000\n"
+				"#INV_X1\nA\nZN\n01\n10\n");
+			cell_library*	cl;
+			cl = new cell_library("test_lib");
+			cl->parse_cc_file(ss);
+			string  s_top_module = "module top_test (a, b, c, d, e, f, h, o);\n"
+				"input a, b, c, d, e, f, h;\n"
+				"output o;\n"
+				"wire w1, w2, w3, w4, w5, w6, w7, w8, w9;\n\n"
+				"OR2_X1 U1 (.A1(a), .A2(b), .ZN(w1));\n"
+				"OR2_X1 U2 (.A1(b), .A2(c), .ZN(w2));\n"
+				"OR2_X1 U3 (.A1(d), .A2(e), .ZN(w3));\n"
+				"NAND2_X1 U4 (.A1(e), .A2(f), .ZN(w4));\n"
+				"INV_X1 U5(.A(h), .ZN(w5));\n"
+				"AND2_X1 U6 (.A1(w1), .A2(w2), .ZN(w6));\n"
+				"AND2_X1 U7 (.A1(w4), .A2(w5), .ZN(w7));\n"
+				"NOR3_X1 U8 (.A1(w6), .A2(w3), .A3(w7) .ZN(w8));\n"
+				"OR2_X1 U9 (.A1(w7), .A2(h), .ZN(w9));\n"
+				"AND2_X1 U10 (.A1(w8), .A2(w9), .ZN(o));\n"
+				"endmodule\n";
+			string s = s_top_module;
+			design d(cl);
+			stringstream ss_module(s);
+			d.parse_design_file(ss_module);
+
+			simulation sim;
+			sim.construct(d.get_top_module());
+			signature sig;
+			sig.construct(&sim);
+			sig.generate_signature(false);
+
+			redundant_wire rw;
+			rw.construct(d.get_top_module());
+			rw.implication_matrix_generator_direct();
+			vector<list<Implication_comb>> vector_implication = rw.get_implication_list();
+			size_t index, left_index, right_index;
+			SignatureNode *left_node, *right_node;
+			list<Implication_comb>::const_iterator l_ite;
+
+			for (index = 0; index < vector_implication.size(); index += 2) {
+				left_index = index / 2;
+				left_node = sig.get_signature_node(rw.get_node_name(left_index));
+				for (l_ite = vector_implication[index].cbegin();
+				l_ite != vector_implication[index].cend(); l_ite++) {
+					right_index = (*l_ite).index;
+					right_node = sig.get_signature_node(rw.get_node_name(right_index));
+					if ((*l_ite).val == ZERO) {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig | right_node->vSig));
+						//Logger::WriteMessage((left_node->sName + "\t0\t" + right_node->sName + "\t0\n").c_str());
+					}
+					else {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig | ~right_node->vSig));
+						//Logger::WriteMessage((left_node->sName + "\t0\t" + right_node->sName + "\t1\n").c_str());
+					}
+				}
+				for (l_ite = vector_implication[index + 1].cbegin();
+				l_ite != vector_implication[index + 1].cend(); l_ite++) {
+					right_index = (*l_ite).index;
+					right_node = sig.get_signature_node(rw.get_node_name(right_index));
+					if ((*l_ite).val == ZERO) {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig & ~right_node->vSig));
+						//Logger::WriteMessage((left_node->sName + "\t1\t" + right_node->sName + "\t0\n").c_str());
+					}
+					else {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig & right_node->vSig));
+						/*Logger::WriteMessage((left_node->sName + "\t1\t" + right_node->sName + "\t1\n").c_str());*/
+					}
+				}
+			}
+		}
+		TEST_METHOD(test_indirect_low_justification_result) {
+			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
+				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
+				"#NAND2_X1\nA1 A2\nZN\n0010 0001\n1100\n"
+				"#NOR2_X1\nA1 A2\nZN\n0011\n1000 0100\n"
+				"#NOR3_X1\nA1 A2 A3\nZN\n000111\n100000 010000 001000\n"
+				"#INV_X1\nA\nZN\n01\n10\n");
+			cell_library*	cl;
+			cl = new cell_library("test_lib");
+			cl->parse_cc_file(ss);
+			string  s_top_module = "module top_test (a, b, c, d, e, f, h, o);\n"
+				"input a, b, c, d, e, f, h;\n"
+				"output o;\n"
+				"wire w1, w2, w3, w4, w5, w6, w7, w8, w9;\n\n"
+				"OR2_X1 U1 (.A1(a), .A2(b), .ZN(w1));\n"
+				"OR2_X1 U2 (.A1(b), .A2(c), .ZN(w2));\n"
+				"OR2_X1 U3 (.A1(d), .A2(e), .ZN(w3));\n"
+				"NAND2_X1 U4 (.A1(e), .A2(f), .ZN(w4));\n"
+				"INV_X1 U5(.A(h), .ZN(w5));\n"
+				"AND2_X1 U6 (.A1(w1), .A2(w2), .ZN(w6));\n"
+				"AND2_X1 U7 (.A1(w4), .A2(w5), .ZN(w7));\n"
+				"NOR3_X1 U8 (.A1(w6), .A2(w3), .A3(w7) .ZN(w8));\n"
+				"OR2_X1 U9 (.A1(w7), .A2(h), .ZN(w9));\n"
+				"AND2_X1 U10 (.A1(w8), .A2(w9), .ZN(o));\n"
+				"endmodule\n";
+			string s = s_top_module;
+			design d(cl);
+			stringstream ss_module(s);
+			d.parse_design_file(ss_module);
+
+			simulation sim;
+			sim.construct(d.get_top_module());
+			signature sig;
+			sig.construct(&sim);
+			sig.generate_signature(false);
+
+			redundant_wire rw;
+			rw.construct(d.get_top_module());
+			rw.implication_matrix_generator();
+			vector<list<Implication_comb>> vector_implication = rw.get_implication_list();
+			size_t index, left_index, right_index;
+			SignatureNode *left_node, *right_node;
+			list<Implication_comb>::const_iterator l_ite;
+
+			for (index = 0; index < vector_implication.size(); index += 2) {
+				left_index = index / 2;
+				left_node = sig.get_signature_node(rw.get_node_name(left_index));
+				for (l_ite = vector_implication[index].cbegin();
+				l_ite != vector_implication[index].cend(); l_ite++) {
+					right_index = (*l_ite).index;
+					right_node = sig.get_signature_node(rw.get_node_name(right_index));
+					if ((*l_ite).val == ZERO) {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig | right_node->vSig));
+						/*Logger::WriteMessage((left_node->sName + "\t0\t" + right_node->sName + "\t0\n").c_str());*/
+					}
+					else {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig | ~right_node->vSig));
+						/*Logger::WriteMessage((left_node->sName + "\t0\t" + right_node->sName + "\t1\n").c_str());*/
+					}
+				}
+				for (l_ite = vector_implication[index + 1].cbegin();
+				l_ite != vector_implication[index + 1].cend(); l_ite++) {
+					right_index = (*l_ite).index;
+					right_node = sig.get_signature_node(rw.get_node_name(right_index));
+					if ((*l_ite).val == ZERO) {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig & ~right_node->vSig));
+						/*Logger::WriteMessage((left_node->sName + "\t1\t" + right_node->sName + "\t0\n").c_str());*/
+					}
+					else {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig & right_node->vSig));
+						/*Logger::WriteMessage((left_node->sName + "\t1\t" + right_node->sName + "\t1\n").c_str());*/
+					}
+				}
+			}
+		}
+		TEST_METHOD(test_indirect_high_justification_result) {
+			stringstream ss("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
+				"#OR2_X1\nA1 A2\nZN\n1000 0100\n0011\n"
+				"#NAND2_X1\nA1 A2\nZN\n0010 0001\n1100\n"
+				"#NOR2_X1\nA1 A2\nZN\n0011\n1000 0100\n"
+				"#NOR3_X1\nA1 A2 A3\nZN\n000111\n100000 010000 001000\n"
+				"#INV_X1\nA\nZN\n01\n10\n");
+			cell_library*	cl;
+			cl = new cell_library("test_lib");
+			cl->parse_cc_file(ss);
+			string  s_top_module = "module top_test (a, b, c, d, e, f, h, o);\n"
+				"input a, b, c, d, e, f, h;\n"
+				"output o;\n"
+				"wire w1, w2, w3, w4, w5, w6, w7, w8, w9;\n\n"
+				"OR2_X1 U1 (.A1(a), .A2(b), .ZN(w1));\n"
+				"OR2_X1 U2 (.A1(b), .A2(c), .ZN(w2));\n"
+				"OR2_X1 U3 (.A1(d), .A2(e), .ZN(w3));\n"
+				"NAND2_X1 U4 (.A1(e), .A2(f), .ZN(w4));\n"
+				"INV_X1 U5(.A(h), .ZN(w5));\n"
+				"AND2_X1 U6 (.A1(w1), .A2(w2), .ZN(w6));\n"
+				"AND2_X1 U7 (.A1(w4), .A2(w5), .ZN(w7));\n"
+				"NOR3_X1 U8 (.A1(w6), .A2(w3), .A3(w7) .ZN(w8));\n"
+				"OR2_X1 U9 (.A1(w7), .A2(h), .ZN(w9));\n"
+				"AND2_X1 U10 (.A1(w8), .A2(w9), .ZN(o));\n"
+				"endmodule\n";
+			string s = s_top_module;
+			design d(cl);
+			stringstream ss_module(s);
+			d.parse_design_file(ss_module);
+
+			simulation sim;
+			sim.construct(d.get_top_module());
+			signature sig;
+			sig.construct(&sim);
+			sig.generate_signature(false);
+
+			redundant_wire rw;
+			rw.construct(d.get_top_module());
+			rw.implication_matrix_generator_full();
+			vector<list<Implication_comb>> vector_implication = rw.get_implication_list();
+			size_t index, left_index, right_index;
+			SignatureNode *left_node, *right_node;
+			list<Implication_comb>::const_iterator l_ite;
+
+			for (index = 0; index < vector_implication.size(); index += 2) {
+				left_index = index / 2;
+				left_node = sig.get_signature_node(rw.get_node_name(left_index));
+				for (l_ite = vector_implication[index].cbegin();
+				l_ite != vector_implication[index].cend(); l_ite++) {
+					right_index = (*l_ite).index;
+					right_node = sig.get_signature_node(rw.get_node_name(right_index));
+					if ((*l_ite).val == ZERO) {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig | right_node->vSig));
+						/*Logger::WriteMessage((left_node->sName + "\t0\t" + right_node->sName + "\t0\n").c_str());*/
+					}
+					else {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig | ~right_node->vSig));
+						/*Logger::WriteMessage((left_node->sName + "\t0\t" + right_node->sName + "\t1\n").c_str());*/
+					}
+				}
+				for (l_ite = vector_implication[index + 1].cbegin();
+				l_ite != vector_implication[index + 1].cend(); l_ite++) {
+					right_index = (*l_ite).index;
+					right_node = sig.get_signature_node(rw.get_node_name(right_index));
+					if ((*l_ite).val == ZERO) {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig & ~right_node->vSig));
+						/*Logger::WriteMessage((left_node->sName + "\t1\t" + right_node->sName + "\t0\n").c_str());*/
+					}
+					else {
+						Assert::AreEqual(true, left_node->vSig == (left_node->vSig & right_node->vSig));
+						/*Logger::WriteMessage((left_node->sName + "\t1\t" + right_node->sName + "\t1\n").c_str());*/
+					}
+				}
+			}
 		}
 	};
 }

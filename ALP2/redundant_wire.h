@@ -6,6 +6,10 @@
 #include <algorithm>
 #include <valarray>
 
+typedef enum {
+	BACKWARD, DIRECT, INDIRECT_LOW, INDIRECT_HIGH
+}Implicaton_method;
+
 typedef struct {
 	int							index;
 	Wire_value					val;
@@ -54,8 +58,7 @@ private:
 	vector<int>					vPrimaryOutputList;
 	valarray<bool>				matrixImplication;
 	valarray<bool>				matrixImplicationScreen;
-	vector<list<Implication_comb>>	vSimpleIndirectImplication;
-	vector<list<Implication_comb>>	vIndirectImplication;
+	vector<list<Implication_comb>>	vImplication;
 	vector<set<int>>			vNodeFaninSet;
 	vector<set<int>>			vNodeFanoutSet;
 	/*vector<map<int, set<int>>>	vNodeDominatorSet;*/
@@ -74,6 +77,8 @@ public:
 	set<string>					get_node_fanin(string node_name);
 	set<string>					get_node_fanout(string node_name);
 	string						get_cell_type(string node_name);
+	int							get_implication_num();
+	vector<list<Implication_comb>>	get_implication_list();
 	void						set_value(int index, Wire_value value);
 	void						set_X();
 private:
@@ -83,8 +88,7 @@ private:
 		vector<int> &output_list, int start_pos, module* tar_module, string& prefix);
 
 //methods for initialization
-	void						_setup_indirect_implication_vector();
-	void						_setup_simple_indirect_implication_vector();
+	void						_setup_implication_vector();
 	void						_setup_implication_matrix();
 	void						_setup_implication_screen_matrix();
 	void						_setup_fanin_fanout_set();
@@ -100,17 +104,29 @@ private:
 		bool> &table, stack<int> &stack_index);
 	unsigned					_calculate_inputs_index(int tar_index);
 	void						_forward_justify(int tar_index, stack<int> &stack_index);
+	void						_matrix_generator(Implicaton_method method);
+	void						_generate_implication_vector();
+
 public:
 	void						justification(Implication_list &imp_list);
 	void						justification_full(Implication_list &imp_list, 
 		set<Implication_comb, Implication_comb_compare> &update_set);
 	void						direct_justification(Implication_list &imp_list);
 	void						backward_justification(Implication_list &imp_list);
+	void						implication_matrix_generator_backward();
+	void						implication_matrix_generator_direct();
+	void						implication_matrix_generator();
+	void						implication_matrix_generator_full();
+	
 };
 
 inline	bool	redundant_wire::_implication_verify(bitset<MAX_CELL_INPUTS_X2> mask, 
 	bitset<MAX_CELL_INPUTS_X2> curr, const bitset<MAX_CELL_INPUTS_X2> &req) const {
-	//mask with value 1 : bits already known
+	//mask bits with value 1 : bits already known
 	curr.flip();
 	return (mask & curr & req).none();
+}
+
+inline vector<list<Implication_comb>>	redundant_wire::get_implication_list() {
+	return vImplication;
 }
