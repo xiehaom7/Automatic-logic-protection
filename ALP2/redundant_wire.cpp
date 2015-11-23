@@ -15,6 +15,8 @@ void redundant_wire::destroy() {
 		delete *rw_ite;
 	}
 	pTopModule = NULL;
+	sim.destroy();
+	sig.destroy();
 	vRWNodeList.clear();
 	mapRWNodeList.clear();
 	vPrimaryInputList.clear();
@@ -161,6 +163,10 @@ bool redundant_wire::construct(module* tar_module) {
 			if (*ite != NULL)
 				cap++;
 		vRWNodeList.resize(cap);
+
+		sim.construct(pTopModule);
+		sig.construct(&sim);
+		sig.generate_signature();
 
 		_setup_implication_vector();
 		_setup_implication_matrix();
@@ -683,37 +689,631 @@ void redundant_wire::implication_matrix_generator_full() {
 	return;
 }
 
-void redundant_wire::_generate_implication_vector() {
+int redundant_wire::_generate_implication_vector() {
 	size_t size = vRWNodeList.size();
 	unsigned i, j;
 	Implication_comb new_comb;
 	int index;
+	int total = 0;
 
 	for (i = 0; i < size; i++) {
 		for (j = 0; j < size; j++) {
+			if (_count_distance(j, i) <= 1)
+				continue;
 			index = i * 2;
 			if (matrixImplication[index * size * 2 + j * 2]) {
 				new_comb.index = j;
 				new_comb.val = ZERO;
 				vImplication[index].push_back(new_comb);
+				total++;
 			}
 			else if (matrixImplication[index * size * 2 + j * 2 + 1]) {
 				new_comb.index = j;
 				new_comb.val = ONE;
 				vImplication[index].push_back(new_comb);
+				total++;
 			}
 			index = i * 2 + 1;
 			if (matrixImplication[index * size * 2 + j * 2]) {
 				new_comb.index = j;
 				new_comb.val = ZERO;
 				vImplication[index].push_back(new_comb);
+				total++;
 			}
 			else if (matrixImplication[index * size * 2 + j * 2 + 1]) {
 				new_comb.index = j;
 				new_comb.val = ONE;
 				vImplication[index].push_back(new_comb);
+				total++;
 			}
 		}
 	}
+#ifdef DISPLAY
+	cout << "Total implication candidates: " << total << endl;
+#endif
+	return total;
+}
+
+void redundant_wire::setup_observability(vector<bitset<SIGNATURE_SIZE>> &cache_node_ob) {
+	SignatureNode* sig_node;
+	int i;
+
+	sig.analyse_observability(0);
+	cache_node_ob.resize(vRWNodeList.size());
+	for (i = 0; i < vRWNodeList.size(); i++) {
+		sig_node = sig.get_signature_node(vRWNodeList[i]->sName);
+		cache_node_ob[i] = sig_node->vODCmask[0];
+	}
 	return;
+}
+
+void redundant_wire::setup_to_source_observability(int target,
+	map<int, vector<bitset<SIGNATURE_SIZE>>> &cache_to_source_ob) {
+	cache_to_source_ob[target].resize(vRWNodeList.size());
+	vector<int> exclude_node_list;
+	vector<int> tar_node_list;
+	SignatureNode* sig_node;
+	int i;
+
+	tar_node_list.push_back(sig.get_node_index(vRWNodeList[target]->sName));
+	sig.analyse_observability(tar_node_list, exclude_node_list, 1);
+	for (i = 0; i < vRWNodeList.size(); i++) {
+		sig_node = sig.get_signature_node(vRWNodeList[i]->sName);
+		cache_to_source_ob[target][i] = sig_node->vODCmask[1];
+	}
+	return;
+}
+
+void redundant_wire::setup_not_to_dest_observability(int target,
+	map<int, vector<bitset<SIGNATURE_SIZE>>> &cache_not_to_dest_ob) {
+	cache_not_to_dest_ob[target].resize(vRWNodeList.size());
+	vector<int> exclude_node_list;
+	SignatureNode* sig_node;
+	int i;
+
+	exclude_node_list.push_back(sig.get_node_index(vRWNodeList[target]->sName));
+	sig.analyse_observability(exclude_node_list, 2);
+	for (i = 0; i < vRWNodeList.size(); i++) {
+		sig_node = sig.get_signature_node(vRWNodeList[i]->sName);
+		cache_not_to_dest_ob[target][i] = sig_node->vODCmask[2];
+	}
+	return;
+}
+
+float redundant_wire::implication_evaluator(Implication_comb left_imp, Implication_comb right_imp, 
+	vector<bitset<SIGNATURE_SIZE>> &unprotected_sig, vector<Gate_record_item> &vector_gate_record, 
+	vector<bitset<SIGNATURE_SIZE>> &cache_node_ob, 
+	map<int, vector<bitset<SIGNATURE_SIZE>>> &cache_to_source_ob,
+	map<int, vector<bitset<SIGNATURE_SIZE>>> &cache_not_to_dest_ob) {
+	float res = 0.0;
+	float single_node_res;
+	bitset<SIGNATURE_SIZE> v;
+	SignatureNode* sig_left_node;
+	set<int>::const_iterator fanin_ite;
+	vector<Gate_record_item>::const_iterator gate_record_ite;
+	int count;
+
+#ifdef DISPLAY
+	cout << "---\t" << vRWNodeList[left_imp.index]->sName << "\t" << left_imp.val << 
+		"\t" << vRWNodeList[right_imp.index]->sName << "\t" << right_imp.val << "\t" << "---" << endl;
+#endif
+	if (vector_gate_record.empty()) {
+		if (cache_node_ob.empty()) 
+			setup_observability(cache_node_ob);
+
+		if (cache_to_source_ob.find(left_imp.index) == cache_to_source_ob.end())
+			setup_to_source_observability(left_imp.index, cache_to_source_ob);
+		
+		if (cache_not_to_dest_ob.find(right_imp.index) == cache_not_to_dest_ob.end())
+			setup_not_to_dest_observability(right_imp.index, cache_not_to_dest_ob);
+
+		for (fanin_ite = vNodeFaninSet[right_imp.index].cbegin();
+		fanin_ite != vNodeFaninSet[right_imp.index].cend(); fanin_ite++) {
+			if (vRWNodeList[*fanin_ite]->vFanin.empty())
+				continue;
+			Gate_record_item new_item;
+			sig_left_node = sig.get_signature_node(vRWNodeList[left_imp.index]->sName);
+			new_item.gate_index = *fanin_ite;
+			new_item.ODCmask[0] = cache_node_ob[*fanin_ite];
+			new_item.ODCmask[1] = cache_to_source_ob[left_imp.index][*fanin_ite];
+			new_item.ODCmask[2] = cache_not_to_dest_ob[right_imp.index][*fanin_ite];
+			calculate_ODCres((left_imp.val == ONE) ? sig_left_node->vSig : ~(sig_left_node->vSig),
+				new_item.ODCmask[0],
+				new_item.ODCmask[1],
+				new_item.ODCmask[2],
+				new_item.ODCres);
+			if (new_item.ODCres.count() != 0)
+				vector_gate_record.push_back(new_item);
+		}
+	}
+	for (gate_record_ite = vector_gate_record.cbegin(); gate_record_ite != vector_gate_record.cend(); gate_record_ite++) {
+		calculate_protect((*gate_record_ite).ODCres,
+			unprotected_sig[(*gate_record_ite).gate_index],
+			v);
+
+		count = v.count();
+		if (count != 0) {
+			single_node_res = (float)count / SIGNATURE_SIZE;
+			res += single_node_res;
+		}
+
+#ifdef DISPLAY
+		if (count != 0) {
+			cout << vRWNodeList[(*gate_record_ite).gate_index]->sName << "\t";
+			cout << single_node_res << endl;
+		}
+#endif
+	}
+#ifdef DISPLAY
+	cout << res << endl;
+#endif
+	return res;
+}
+
+void redundant_wire::calculate_ODCres(const bitset<SIGNATURE_SIZE> &source,
+	const bitset<SIGNATURE_SIZE> &observability_to_all,
+	const bitset<SIGNATURE_SIZE> &observability_to_source,
+	const bitset<SIGNATURE_SIZE> &observability_exclude_target,
+	bitset<SIGNATURE_SIZE> &res) {
+	res.set();
+	res &= source;
+	res &= observability_to_all;
+	res &= ~(observability_to_source);
+	res &= ~(observability_exclude_target);
+	return;
+}
+
+void redundant_wire::calculate_protect(const bitset<SIGNATURE_SIZE> &ODCres, 
+	const bitset<SIGNATURE_SIZE> &unprotect, 
+	bitset<SIGNATURE_SIZE> &res) {
+	res.set();
+	res &= ODCres;
+	res &= unprotect;
+	return;
+}
+
+void	redundant_wire::_execute_op(const Op_item &op, map<string, node*> &mapNode, map<string, net*> &mapNet) {
+	switch (op.op) {
+	case AW:
+	{
+		net* new_net = pTopModule->add_net(WIRE_ADDED_NAME + std::to_string((_ULonglong)rw_wire_added_counter++));
+		mapNet[op.new_name] = new_net;
+		break;
+	}
+	case AG:
+	{
+		node* new_node = pTopModule->add_node(GATE_ADDED_NAME + std::to_string((_ULonglong)rw_gate_added_counter++), op.op1);
+		mapNode[op.new_name] = new_node;
+		break;
+	}
+	case CW:
+	{
+		net* tar_net;
+		node* tar_node;
+		map<string, net*>::iterator ite_net;
+		map<string, node*>::iterator ite_node;
+		if (op.op1_pin.empty()) {
+			ite_net = mapNet.find(op.op1);
+			assert(ite_net != mapNet.end());
+			tar_net = ite_net->second;
+		}
+		else {
+			ite_net = mapNet.find(op.op1 + "." + op.op1_pin);
+			assert(ite_net != mapNet.end());
+			tar_net = ite_net->second;
+		}
+		ite_node = mapNode.find(op.op2);
+		assert(ite_node != mapNode.end());
+		tar_node = ite_node->second;
+		pTopModule->connect_wire(tar_net, tar_node, op.op2_pin);
+		break;
+	}
+	case DW:
+	{
+		net* tar_net;
+		node* tar_node;
+		map<string, net*>::iterator ite_net;
+		map<string, node*>::iterator ite_node;
+		assert(!op.op1_pin.empty());
+
+		ite_node = mapNode.find(op.op1);
+		assert(ite_node != mapNode.end());
+		node* temp_node = ite_node->second;
+		if (temp_node->get_node_type() == TYPE_CELL) {
+			if (temp_node->get_cell_ref()->output_pin == op.op1_pin) {
+				tar_net = temp_node->get_output_net(0);
+			}
+			else {
+				tar_net = temp_node->get_input_net(temp_node->get_cell_ref()->get_input_pos(op.op1_pin));
+			}
+		}
+		else {
+			int index = temp_node->get_module_ref()->get_output_pos(op.op1_pin);
+			if (index != -1) {
+				tar_net = temp_node->get_output_net(index);
+			}
+			else {
+				tar_net = temp_node->get_input_net(temp_node->get_module_ref()->get_input_pos(op.op1_pin));
+			}
+		}
+
+		mapNet[op.op1 + "." + op.op1_pin] = tar_net;
+
+		tar_node = temp_node;
+		pTopModule->disconnect_wire(tar_net, tar_node, op.op1_pin);
+		break;
+	}
+	case RG:
+	{
+		node* tar_node;
+		map<string, node*>::iterator ite_node;
+
+		ite_node = mapNode.find(op.op1);
+		assert(ite_node != mapNode.end());
+		tar_node = ite_node->second;
+
+		pTopModule->remove_node(tar_node);
+		break;
+	}
+	}
+}
+
+bool redundant_wire::redundant_wire_adder(Implication_comb &left_comb, Implication_comb &right_comb) {
+	map<string, node*> mapNode;
+	map<string, net*> mapNet;
+
+	int source_net_index = left_comb.index;
+	int dest_net_index = right_comb.index;
+	net* source_net = pTopModule->get_net(
+		vRWNodeList[source_net_index]->sName.substr(vRWNodeList[source_net_index]->sName.find_first_of(".")+1));
+	net* dest_net = pTopModule->get_net(
+		vRWNodeList[dest_net_index]->sName.substr(vRWNodeList[dest_net_index]->sName.find_first_of(".")+1));
+	map<string, Pin_implication_item*>::const_iterator ite_pin;
+	int implication_index = 0;
+
+	mapNet["X"] = source_net;
+
+	if (left_comb.val == ONE)	implication_index += 2;
+	if (right_comb.val == ONE)	implication_index += 1;
+
+	bool execute_flag = false;
+
+	if (dest_net->get_fanout_num() == 1) {
+		node* dest_driving_node = dest_net->get_fanout_nodes(0);
+		int net_index = dest_driving_node->find_input_net(dest_net);
+		assert(net_index != -1);
+		cell* cell_ref = dest_driving_node->get_cell_ref();
+		string pin_name = cell_ref->input_pinlist[net_index];
+		ite_pin = cell_ref->rw_op_collection.find(pin_name);
+		if (ite_pin != cell_ref->rw_op_collection.cend()) {
+			if (ite_pin->second->implication_item_array[implication_index] != NULL) {
+				execute_flag = true;
+				mapNode["old"] = dest_driving_node;
+				for (vector<Op_item>::const_iterator ite_op = ite_pin->second->implication_item_array[implication_index]->op_list.cbegin(); ite_op != ite_pin->second->implication_item_array[implication_index]->op_list.cend(); ite_op++) {
+					_execute_op((*ite_op), mapNode, mapNet);
+				}
+			}
+		}
+	}
+	if (!execute_flag) {
+		node* dest_driven_node = dest_net->get_fanin_node();
+		cell* cell_ref = dest_driven_node->get_cell_ref();
+		string pin_name = cell_ref->output_pin;
+		ite_pin = cell_ref->rw_op_collection.find(pin_name);
+		if (ite_pin != cell_ref->rw_op_collection.cend()) {
+			if (ite_pin->second->implication_item_array[implication_index] != NULL) {
+				execute_flag = true;
+				mapNode["old"] = dest_driven_node;
+				for (vector<Op_item>::const_iterator ite_op = ite_pin->second->implication_item_array[implication_index]->op_list.cbegin(); ite_op != ite_pin->second->implication_item_array[implication_index]->op_list.cend(); ite_op++) {
+					_execute_op((*ite_op), mapNode, mapNet);
+				}
+			}
+		}
+	}
+	if (!execute_flag) {
+		net* source_net_inverted = NULL;
+		net* dest_net_unchecked = NULL;
+
+		node* dest_driven_node = dest_net->get_fanin_node();
+		node* inverter_node = NULL;
+		node* checker_node = NULL;
+
+		pTopModule->disconnect_wire(dest_net, dest_driven_node, dest_driven_node->get_cell_ref()->output_pin);
+
+
+		if (left_comb.val != right_comb.val) {
+			inverter_node = pTopModule->add_node(GATE_ADDED_NAME + std::to_string((_ULonglong)rw_gate_added_counter++), INVERTER_TYPE);
+			pTopModule->connect_wire(source_net, inverter_node, INVERTER_INPUT_PIN);
+			source_net_inverted = pTopModule->add_net(WIRE_ADDED_NAME + std::to_string((_ULonglong)rw_wire_added_counter++));
+			pTopModule->connect_wire(source_net_inverted, inverter_node, INVERTER_OUTPUT_PIN);
+			source_net = source_net_inverted;
+		}
+
+		if (right_comb.val == ONE) {
+			checker_node = pTopModule->add_node(GATE_ADDED_NAME + std::to_string((_ULonglong)rw_gate_added_counter++), OR_TYPE);
+			pTopModule->connect_wire(source_net, checker_node, OR_INPUT_PIN_1);
+			dest_net_unchecked = pTopModule->add_net(WIRE_ADDED_NAME + std::to_string((_ULonglong)rw_wire_added_counter++));
+			pTopModule->connect_wire(dest_net_unchecked, dest_driven_node, dest_driven_node->get_cell_ref()->output_pin);
+			pTopModule->connect_wire(dest_net_unchecked, checker_node, OR_INPUT_PIN_2);
+			pTopModule->connect_wire(dest_net, checker_node, OR_OUTPUT_PIN);
+		}
+		else {
+			checker_node = pTopModule->add_node(GATE_ADDED_NAME + std::to_string((_ULonglong)rw_gate_added_counter++), AND_TYPE);
+			pTopModule->connect_wire(source_net, checker_node, AND_INPUT_PIN_1);
+			dest_net_unchecked = pTopModule->add_net(WIRE_ADDED_NAME + std::to_string((_ULonglong)rw_wire_added_counter++));
+			pTopModule->connect_wire(dest_net_unchecked, dest_driven_node, dest_driven_node->get_cell_ref()->output_pin);
+			pTopModule->connect_wire(dest_net_unchecked, checker_node, AND_INPUT_PIN_2);
+			pTopModule->connect_wire(dest_net, checker_node, AND_OUTPUT_PIN);
+		}
+	}
+	return true;
+}
+
+void redundant_wire::redundant_wire_selector(const string module_name, int rw_num, 
+	int sample_freq, int sim_num, int fault_num) {
+#ifdef RECORD
+	ofstream pFile((module_name + "_selection.log").c_str());
+	ofstream pFile_ie((module_name + "_implicaiton_evaluation.log").c_str());
+#endif
+	int node_size = vRWNodeList.size();
+	int sample_counter;
+	int i, index;
+	bitset<SIGNATURE_SIZE> temp;
+	temp.set();
+	vector<bitset<SIGNATURE_SIZE>> unprotect(node_size, temp);
+	vector<bitset<SIGNATURE_SIZE>> cache_node_ob;
+	map<int, vector<bitset<SIGNATURE_SIZE>>> cache_to_source_ob;
+	map<int, vector<bitset<SIGNATURE_SIZE>>> cache_not_to_dest_ob;
+
+	vector<Implication_pair> history_rw;
+	list<Rank_item*> rank_rw;
+	list<Rank_item*>::iterator rank_ite;
+
+#ifdef RECORD
+	if (!pFile.is_open())
+		throw exception("failed to open redundant wire selection file. "
+			"(redundant_wire::redundant_wire_selector)\n");
+	if (!pFile_ie.is_open())
+		throw exception("failed to open redundant wire implication evaluation file. "
+			"(redundant_wire::redundant_wire_selector)\n");
+#endif
+
+	int counter = 0;
+
+	list<Implication_comb>::const_iterator list_ite;
+	for (i = 0; i < node_size*2; i++) {
+		index = (i%2 == 0)? i/2 : (i-1)/2;
+		for (list_ite = vImplication[i].cbegin(); list_ite != vImplication[i].cend(); list_ite++) {
+			Rank_item* new_item = new Rank_item;
+			new_item->imp_pair.left_item.index = index;
+			new_item->imp_pair.left_item.val = (i%2 == 0)? ZERO : ONE;
+			new_item->imp_pair.right_item = *list_ite;
+			new_item->source_sig = sig.get_signature_node(vRWNodeList[index]->sName)->vSig;
+			new_item->evaluation_res = implication_evaluator(new_item->imp_pair.left_item, 
+				new_item->imp_pair.right_item, unprotect, new_item->gate_record_vector,
+				cache_node_ob, cache_to_source_ob, cache_not_to_dest_ob);
+			for (rank_ite = rank_rw.begin(); rank_ite != rank_rw.end(); rank_ite++) {
+				if ((*rank_ite)->evaluation_res <= new_item->evaluation_res) {
+					rank_rw.insert(rank_ite, new_item);
+					break;
+				}
+			}
+			if (rank_ite == rank_rw.end()) {
+				rank_rw.insert(rank_ite, new_item);
+			}
+#ifdef RECORD
+			pFile_ie << endl << vRWNodeList[new_item->imp_pair.left_item.index]->sName << "\t" 
+				<< ((new_item->imp_pair.left_item.val == ONE) ? "1" : "0") << "\t" 
+				<< vRWNodeList[new_item->imp_pair.right_item.index]->sName << "\t"
+				<< ((new_item->imp_pair.right_item.val == ONE) ? "1" : "0") << "\t";
+			pFile_ie << (float)((new_item->imp_pair.left_item.val == ONE) 
+				? new_item->source_sig.count() 
+				: (~new_item->source_sig).count()) / SIGNATURE_SIZE << "\t";
+			pFile_ie << new_item->evaluation_res << endl;
+			for (vector<Gate_record_item>::const_iterator gate_ite = new_item->gate_record_vector.cbegin();
+			gate_ite != new_item->gate_record_vector.cend(); gate_ite++) {
+				pFile_ie << vRWNodeList[(*gate_ite).gate_index]->sName << "\t"
+					<< (*gate_ite).ODCmask[0].count() << "\t" 
+					<< (*gate_ite).ODCmask[1].count() << "\t" 
+					<< (*gate_ite).ODCmask[2].count() << "\t" 
+					<< (float)(*gate_ite).ODCres.count()/SIGNATURE_SIZE << endl;
+			}
+#endif
+		}
+	}
+#ifdef RECORD
+	pFile_ie.close();
+#endif
+	bool select_flag;
+	float new_evaluation;
+	double sim_res;
+	Rank_item* temp_ptr;
+	list<Rank_item*>::iterator head_ite;
+
+#ifdef RECORD
+	pFile << "NULL - NULL - ";
+	simulation module_sim;
+	module_sim.construct(pTopModule);
+	simulation_evaluation sim_evaluate;
+	sim_evaluate.construct(&module_sim);
+	if (sim_num == 0 && fault_num == 0)
+		sim_evaluate.run_exhaustive_fault_injection_simulation();
+	else
+		sim_evaluate.run_random_fault_injection_simulation(sim_num, fault_num);
+	sim_res = sim_evaluate.evaluate_fault_injection_results();
+	pFile << " " << "0" << " " << sim_res << endl;
+#endif
+
+	sample_counter = 0;
+	while (rw_num >  0 && !rank_rw.empty()) {
+		select_flag = false;
+		while (!select_flag) {
+			head_ite = rank_rw.begin();
+			temp_ptr = *head_ite;
+			rank_rw.erase(head_ite);
+			new_evaluation = implication_evaluator(temp_ptr->imp_pair.left_item, 
+				temp_ptr->imp_pair.right_item, 
+				unprotect, temp_ptr->gate_record_vector,
+				cache_node_ob, cache_to_source_ob, cache_not_to_dest_ob);
+			if (abs(new_evaluation - temp_ptr->evaluation_res) < 0.0000001) {
+				redundant_wire_adder(temp_ptr->imp_pair.left_item, temp_ptr->imp_pair.right_item);
+				if (pTopModule->check_module()) {
+					update_unprotect(*temp_ptr, unprotect);
+					history_rw.push_back(temp_ptr->imp_pair);
+#ifdef RECORD
+					pFile << vRWNodeList[temp_ptr->imp_pair.left_item.index]->sName + "\t" + ((temp_ptr->imp_pair.left_item.val == ONE) ? "1" : "0");
+					pFile << "\t" + vRWNodeList[temp_ptr->imp_pair.right_item.index]->sName + "\t" + ((temp_ptr->imp_pair.right_item.val == ONE) ? "1" : "0");
+					
+					if (sample_counter % sample_freq == 0) {
+						simulation module_sim;
+						module_sim.construct(pTopModule);
+						simulation_evaluation sim_evaluate;
+						sim_evaluate.construct(&module_sim);
+						if (sim_num == 0 && fault_num == 0)
+							sim_evaluate.run_exhaustive_fault_injection_simulation();
+						else
+							sim_evaluate.run_random_fault_injection_simulation(sim_num, fault_num);
+						sim_res = sim_evaluate.evaluate_fault_injection_results();
+						pFile << " " << "0" << " " << sim_res << endl;
+						pFile << "\t" << temp_ptr->evaluation_res << "\t" << sim_res << endl;
+					}
+					else {
+						pFile << "\t" << temp_ptr->evaluation_res << "\t" << "-" << endl;
+					}
+#endif
+					delete temp_ptr;
+					select_flag = true;
+				}
+				else {
+					pTopModule->rollback();
+				}
+			}
+			else {
+				temp_ptr->evaluation_res = new_evaluation;
+				for (rank_ite = rank_rw.begin(); rank_ite != rank_rw.end(); rank_ite++) {
+					if ((*rank_ite)->evaluation_res <= temp_ptr->evaluation_res) {
+						rank_rw.insert(rank_ite, temp_ptr);
+						break;
+					}
+				}
+				if (rank_ite == rank_rw.end()) {
+					rank_rw.insert(rank_ite, temp_ptr);
+				}
+			}
+		}
+		pTopModule->commit();
+#ifdef RECORD
+		ofstream pFile_mo(module_name + "_rw_" + std::to_string((long double)sample_counter) + ".v");
+		pFile_mo << pTopModule->write_module();
+		pFile_mo.close();
+#endif
+		rw_num--;
+		sample_counter++;
+	}
+#ifdef RECORD
+	pFile.close();
+#endif
+	return;
+}
+
+void redundant_wire::update_unprotect(Rank_item& tar_item, vector<bitset<SIGNATURE_SIZE>>& unprotect) {
+	vector<Gate_record_item>::const_iterator ite;
+	for (ite = tar_item.gate_record_vector.cbegin(); ite != tar_item.gate_record_vector.cend(); ite++) {
+		unprotect[(*ite).gate_index] &= ~(*ite).ODCres;
+	}
+	return;
+}
+
+int redundant_wire::_count_distance(int dest_node_index, int source_node_index) {
+	vector<int> vDistanceLst;
+	queue<int> qNodeLst;
+	vector<int>::const_iterator fanin_ite;
+	int current_node_index;
+	int node_size = vRWNodeList.size();
+
+	if (vNodeFanoutSet[dest_node_index].find(source_node_index) != vNodeFanoutSet[dest_node_index].end()) {
+		return -1;
+	}
+	if (vNodeFaninSet[dest_node_index].find(source_node_index) != vNodeFaninSet[dest_node_index].end()) {
+		vDistanceLst.resize(node_size, -1);
+
+		qNodeLst.push(dest_node_index);
+		vDistanceLst[dest_node_index] = 0;
+
+		while (!qNodeLst.empty()) {
+			current_node_index = qNodeLst.front();
+			qNodeLst.pop();
+
+			if (current_node_index == source_node_index) {
+				return vDistanceLst[current_node_index];
+			}
+			else {
+				for (fanin_ite = vRWNodeList[current_node_index]->vFanin.cbegin(); 
+				fanin_ite != vRWNodeList[current_node_index]->vFanin.cend(); fanin_ite++) {
+					if (vDistanceLst[*fanin_ite] == -1) {
+						vDistanceLst[*fanin_ite] = vDistanceLst[current_node_index] + 1;
+						qNodeLst.push(*fanin_ite);
+					}
+				}
+			}
+		}
+	}
+	else {
+		vDistanceLst.resize(node_size, -1);
+
+		set<int> set_intersect;
+		set_intersection(vNodeFaninSet[dest_node_index].begin(), vNodeFaninSet[dest_node_index].end(), 
+			vNodeFaninSet[source_node_index].begin(), vNodeFaninSet[source_node_index].end(), 
+			std::inserter(set_intersect, set_intersect.begin()));
+
+		if (set_intersect.empty()) {
+			return -1;
+		}
+
+		qNodeLst.push(dest_node_index);
+		vDistanceLst[dest_node_index] = 0;
+
+		while (!qNodeLst.empty()) {
+			current_node_index = qNodeLst.front();
+			qNodeLst.pop();
+
+			if (set_intersect.find(current_node_index) != set_intersect.end()) {
+				return vDistanceLst[current_node_index];
+			}
+			else {
+				for (fanin_ite = vRWNodeList[current_node_index]->vFanin.cbegin(); 
+				fanin_ite != vRWNodeList[current_node_index]->vFanin.cend(); fanin_ite++) {
+					if (vDistanceLst[*fanin_ite] == -1) {
+						vDistanceLst[*fanin_ite] = vDistanceLst[current_node_index] + 1;
+						qNodeLst.push(*fanin_ite);
+					}
+				}
+			}
+		}
+	}
+	return -1;
+}
+
+int	redundant_wire::implication_counter(Implicaton_method method) {
+	switch (method) {
+	case BACKWARD:
+		implication_matrix_generator_backward();
+		break;
+	case DIRECT:
+		implication_matrix_generator_direct();
+		break;
+	case INDIRECT_LOW:
+		implication_matrix_generator();
+		break;
+	case INDIRECT_HIGH:
+		implication_matrix_generator_full();
+		break;
+	default:
+		throw exception("unknown implication generate method. (redundant_wire::implication_counter)\n");
+	}
+	int res = 0;
+	for (int i = 0; i < matrixImplication.size(); i++)
+		if (matrixImplication[i])
+			res++;
+	return res;
 }

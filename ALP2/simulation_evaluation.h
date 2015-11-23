@@ -32,9 +32,10 @@ public:
 	bool					construct(simulation* tar_sim);
 	void					run_exhaustive_golden_simulation();
 	void					run_exhaustive_fault_injection_simulation();
+	void					run_random_fault_injection_simulation(int sim_num, int fault_num);
 	void					summarize_golden_results(long parallel_num);
 	void					summarize_fault_injection_results(int fault_num);
 	StatNode*				get_stat_node(string& node_name);
-	void					evaluate_fault_injection_results();
+	double					evaluate_fault_injection_results();
 };
 

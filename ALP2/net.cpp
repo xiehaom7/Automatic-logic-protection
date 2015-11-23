@@ -57,6 +57,7 @@ net& net::remove_fanout_node(node* const p_node) {
 		if ((*ite) == p_node) {
 			vFanouts.erase(ite);
 			iFanoutNum--;
+			return *this;
 		}
 	}
 	return *this;

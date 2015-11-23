@@ -5,7 +5,7 @@
 typedef struct {
 	string					sName;
 	bitset<SIGNATURE_SIZE>	vSig;
-	bitset<SIGNATURE_SIZE>	vODCmask;
+	bitset<SIGNATURE_SIZE>	vODCmask[ODCMASK_SIZE];
 	unsigned				uTest0;
 	unsigned				uTest1;
 }SignatureNode;
@@ -29,9 +29,13 @@ public:
 	bool					construct(simulation* tar_sim);
 	void					generate_signature(bool random = true);
 	void					count_controllability();
-	void					analyse_observability(const vector<int> &tar_node_list, const vector<int> &exclude_node_list);
-	void					analyse_observability();
-	void					mark_fanin_nodes(const vector<int> &tar_node_list, vector<int> &fanin_node_list);
+	void					analyse_observability(const vector<int> &tar_node_list, const vector<int> &exclude_node_list, int index = 0);
+	void					analyse_observability(const vector<int> &exclude_node_list, int index = 0);
+	void					analyse_observability(int index = 0);
+	void					mark_fanin_nodes(const vector<int> &tar_node_list, list<int> &fanin_node_list);
 	SignatureNode*			get_signature_node(string& node_name);
+	int						get_node_index(string& node_name);
+	void					reset_ODCmask(int index);
+	void					reset_ODCmask();
 };
 

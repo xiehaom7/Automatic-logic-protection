@@ -6,8 +6,25 @@
 #include <algorithm>
 #include <valarray>
 
+const string WIRE_ADDED_NAME = "new_wire_";
+const string GATE_ADDED_NAME = "new_gate_";
+
+const string INVERTER_TYPE = "INV_X1";
+const string INVERTER_INPUT_PIN = "A";
+const string INVERTER_OUTPUT_PIN = "ZN";
+
+const string AND_TYPE = "AND2_X1";
+const string AND_INPUT_PIN_1 = "A1";
+const string AND_INPUT_PIN_2 = "A2";
+const string AND_OUTPUT_PIN = "ZN";
+
+const string OR_TYPE = "OR2_X1";
+const string OR_INPUT_PIN_1 = "A1";
+const string OR_INPUT_PIN_2 = "A2";
+const string OR_OUTPUT_PIN = "ZN";
+
 typedef enum {
-	BACKWARD, DIRECT, INDIRECT_LOW, INDIRECT_HIGH
+	BACKWARD = 0, DIRECT, INDIRECT_LOW, INDIRECT_HIGH
 }Implicaton_method;
 
 typedef struct {
@@ -40,18 +57,34 @@ typedef struct {
 }Implication_list;
 
 typedef struct {
+	int							gate_index;
+	bitset<SIGNATURE_SIZE>		ODCmask[3];
+	bitset<SIGNATURE_SIZE>		ODCres;
+}Gate_record_item;
+
+typedef struct {
+	Implication_pair			imp_pair;
+	bitset<SIGNATURE_SIZE>		source_sig;
+	bitset<SIGNATURE_SIZE>		dest_ob_sig;
+	float						evaluation_res;
+	vector<Gate_record_item>	gate_record_vector;
+	bool						flag;
+}Rank_item;
+
+typedef struct {
 	string						sName;
 	Wire_value					eValue;
 	vector<int>					vFanin;
 	vector<int>					vFanout;
 	cell*						pCell;
-	/*StatNode					strStat;*/
 }RWNode;
 
 class redundant_wire
 {
 private:
 	module*						pTopModule;
+	simulation					sim;
+	signature					sig;
 	vector<RWNode*>				vRWNodeList;
 	map<string, int>			mapRWNodeList;
 	vector<int>					vPrimaryInputList;
@@ -61,7 +94,6 @@ private:
 	vector<list<Implication_comb>>	vImplication;
 	vector<set<int>>			vNodeFaninSet;
 	vector<set<int>>			vNodeFanoutSet;
-	/*vector<map<int, set<int>>>	vNodeDominatorSet;*/
 	list<int>					lModificationIndexLst;
 
 	unsigned					rw_wire_added_counter;
@@ -92,7 +124,6 @@ private:
 	void						_setup_implication_matrix();
 	void						_setup_implication_screen_matrix();
 	void						_setup_fanin_fanout_set();
-	/*void						_setup_dominator_set();*/
 
 //methods for implication matrix generation
 	bool						_implication_verify(bitset<MAX_CELL_INPUTS_X2> mask, 
@@ -105,7 +136,9 @@ private:
 	unsigned					_calculate_inputs_index(int tar_index);
 	void						_forward_justify(int tar_index, stack<int> &stack_index);
 	void						_matrix_generator(Implicaton_method method);
-	void						_generate_implication_vector();
+	int							_generate_implication_vector();
+	void						_execute_op(const Op_item &op, map<string, node*> &mapNode, map<string, net*> &mapNet);
+	int							_count_distance(int dest_node_index, int source_node_index);
 
 public:
 	void						justification(Implication_list &imp_list);
@@ -118,6 +151,31 @@ public:
 	void						implication_matrix_generator();
 	void						implication_matrix_generator_full();
 	
+	void						calculate_ODCres(const bitset<SIGNATURE_SIZE> &source,
+		const bitset<SIGNATURE_SIZE> &observability_to_all,
+		const bitset<SIGNATURE_SIZE> &observability_to_source,
+		const bitset<SIGNATURE_SIZE> &observability_exclude_target,
+		bitset<SIGNATURE_SIZE> &res);
+	void						calculate_protect(const bitset<SIGNATURE_SIZE> &ODCres,
+		const bitset<SIGNATURE_SIZE> &unprotect,
+		bitset<SIGNATURE_SIZE> &res);
+	void						update_unprotect(Rank_item& tar_item, vector<bitset<SIGNATURE_SIZE>>& unprotect);
+	void						setup_observability(vector<bitset<SIGNATURE_SIZE>> &cache_node_ob);
+	void						setup_to_source_observability(int target,
+		map<int, vector<bitset<SIGNATURE_SIZE>>> &cache_to_source_ob);
+	void						setup_not_to_dest_observability(int target,
+		map<int, vector<bitset<SIGNATURE_SIZE>>> &cache_not_to_dest_ob);
+	float						implication_evaluator(Implication_comb left_imp, 
+		Implication_comb right_imp,
+		vector<bitset<SIGNATURE_SIZE>> &unprotected_sig, 
+		vector<Gate_record_item> &vector_gate_record,
+		vector<bitset<SIGNATURE_SIZE>> &cache_node_ob,
+		map<int, vector<bitset<SIGNATURE_SIZE>>> &cache_to_source_ob,
+		map<int, vector<bitset<SIGNATURE_SIZE>>> &cache_not_to_dest_ob);
+	bool						redundant_wire_adder(Implication_comb &left_comb, Implication_comb &right_comb);
+	void						redundant_wire_selector(const string module_name, int rw_num, 
+		int sample_freq, int sim_num, int fault_num);
+	int							implication_counter(Implicaton_method method);
 };
 
 inline	bool	redundant_wire::_implication_verify(bitset<MAX_CELL_INPUTS_X2> mask, 

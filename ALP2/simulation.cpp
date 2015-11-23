@@ -243,7 +243,7 @@ void simulation::generate_input_vector(vector<bool> &input_vector, Gen_mode mode
 	int input_num = input_vector.size();
 	vector<bool>::iterator ite = input_vector.begin();
 	int i;
-
+	
 	switch (mode) {
 	case RANDOM:
 	{		
@@ -415,8 +415,10 @@ simulation&	simulation::run_golden_simulation(
 	vector<bool> input_vector(input_num, false);
 	vector<bool> empty_vector(input_num, false);
 	int i;
-	if (random || start_inputs == NULL)
+	if (start_inputs == NULL)
 		start_inputs = &empty_vector;
+	if (random)
+		generate_input_vector(*start_inputs, RANDOM);
 	set_input_vector(input_vector);
 	inject_faults(0, RESET);
 	for (i = 0; i < sim_num; i++) {

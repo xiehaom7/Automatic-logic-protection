@@ -51,6 +51,22 @@ signature::~signature() {
 	destroy();
 }
 
+void signature::reset_ODCmask(int index) {
+	vector<SignatureNode*>::iterator ite;
+	if (index < 0 || index >= ODCMASK_SIZE)
+		return;
+	for (ite = vSigNodeList.begin(); ite != vSigNodeList.end(); ite++)
+		(*ite)->vODCmask[index].reset();
+	return;
+}
+
+void signature::reset_ODCmask() {
+	int index;
+	for (index = 0; index < ODCMASK_SIZE; index++)
+		reset_ODCmask(index);
+	return;
+}
+
 void signature::generate_signature(bool random) {
 	Wire_value* value = NULL;
 	bitset<MAX_PARALLEL_NUM>* res = NULL;
@@ -79,7 +95,7 @@ void signature::count_controllability() {
 	return;
 }
 
-void signature::mark_fanin_nodes(const vector<int> &tar_node_list, vector<int> &fanin_node_list) {
+void signature::mark_fanin_nodes(const vector<int> &tar_node_list, list<int> &fanin_node_list) {
 	stack<int> node_stack;
 	int current;
 	int current_fanin;
@@ -89,30 +105,31 @@ void signature::mark_fanin_nodes(const vector<int> &tar_node_list, vector<int> &
 
 	for (c_ite = tar_node_list.cbegin(); c_ite != tar_node_list.cend(); c_ite++) {
 		node_stack.push(*c_ite);
-		fanin_flag_list[*c_ite] = true;
 	}
 
 	while (!node_stack.empty()) {
 		current = node_stack.top();
 		node_stack.pop();
-		fanin_node_list.push_back(current);
+		fanin_flag_list[current] = true;
 
 		for (i = 0; i < sim->vSimNodeLst[current]->vFanin.size(); i++) {
 			current_fanin = sim->vSimNodeLst[current]->vFanin[i];
-			if (fanin_flag_list[current_fanin])
-				continue;
 			node_stack.push(current_fanin);
-			fanin_flag_list[current_fanin] = true;
 		}
 	}
+
+	for (i = 0; i < node_num; i++)
+		if (fanin_flag_list[i])
+			fanin_node_list.push_front(i);
 	return;
 }
 
-void signature::analyse_observability(const vector<int> &tar_node_list, const vector<int> &exclude_node_list) {
+void signature::analyse_observability(const vector<int> &tar_node_list, const vector<int> &exclude_node_list, int index) {
 	if (tar_node_list.empty())
 		throw exception("target node list empty. (analyse_observability)\n");
 	vector<int>::const_iterator c_ite;
-	vector<int> fanin_node_list;
+	list<int>::const_iterator c_fanin_ite;
+	list<int> fanin_node_list;
 	vector<bool> exclude_flag_list(node_num, false);
 	stack<int> node_stack;
 	int current;
@@ -124,17 +141,18 @@ void signature::analyse_observability(const vector<int> &tar_node_list, const ve
 	int fanin_size;
 	int i, j;
 
+	reset_ODCmask(index);
 	mark_fanin_nodes(tar_node_list, fanin_node_list);
 
 	for (c_ite = tar_node_list.cbegin(); c_ite != tar_node_list.cend(); c_ite++) {
-		vSigNodeList[*c_ite]->vODCmask.set();
+		vSigNodeList[*c_ite]->vODCmask[index].set();
 	}
 	for (c_ite = exclude_node_list.cbegin(); c_ite != exclude_node_list.cend(); c_ite++) {
-		vSigNodeList[*c_ite]->vODCmask.reset();
+		vSigNodeList[*c_ite]->vODCmask[index].reset();
 		exclude_flag_list[*c_ite] = true;
 	}
-	for (c_ite = fanin_node_list.cbegin(); c_ite != fanin_node_list.cend(); c_ite++) {
-		current = *c_ite;
+	for (c_fanin_ite = fanin_node_list.cbegin(); c_fanin_ite != fanin_node_list.cend(); c_fanin_ite++) {
+		current = *c_fanin_ite;
 		current_node = sim->vSimNodeLst[current];
 		fanin_size = current_node->vFanin.size();
 		for (i = 0; i < fanin_size; i++) {
@@ -154,17 +172,22 @@ void signature::analyse_observability(const vector<int> &tar_node_list, const ve
 				}
 				observability_main |= observability_branch;
 			}
-			vSigNodeList[current_fanin]->vODCmask |= 
-				observability_main & vSigNodeList[current]->vODCmask;
+			vSigNodeList[current_fanin]->vODCmask[index] |= 
+				observability_main & vSigNodeList[current]->vODCmask[index];
 		}
 	}
 	return;
 }
 
-void signature::analyse_observability() {
+void signature::analyse_observability(int index) {
 	vector<int> exclude_node_list;
 
-	analyse_observability(sim->vPrimaryOutputLst, exclude_node_list);
+	analyse_observability(sim->vPrimaryOutputLst, exclude_node_list, index);
+	return;
+}
+
+void signature::analyse_observability(const vector<int> &exclude_node_list, int index) {
+	analyse_observability(sim->vPrimaryOutputLst, exclude_node_list, index);
 	return;
 }
 
@@ -173,4 +196,11 @@ SignatureNode* signature::get_signature_node(string& node_name) {
 	if ((ite = mSigNode.find(node_name)) == mSigNode.end())
 		return NULL;
 	return vSigNodeList[(*ite).second];
+}
+
+int	signature::get_node_index(string& node_name) {
+	map<string, int>::iterator ite;
+	if ((ite = mSigNode.find(node_name)) == mSigNode.end())
+		return -1;
+	return (*ite).second;
 }

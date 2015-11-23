@@ -74,9 +74,9 @@ public:
 	string		write_module();
 
 	module&		remove_node(node* tar_node);
-	module&		add_node(const string &node_name, const string &node_type, map<string, module*> &map_module, map<string, cell*> &map_cell);
-	module&		add_node(const string &node_name, const string &node_type);
-	module&		add_net(const string &net_name);
+	node*		add_node(const string &node_name, const string &node_type, map<string, module*> &map_module, map<string, cell*> &map_cell);
+	node*		add_node(const string &node_name, const string &node_type);
+	net*		add_net(const string &net_name);
 	module&		connect_wire(net* tar_net, node* tar_gate, const string pin_name);
 	module&		disconnect_wire(net* tar_net, node* tar_gate, const string pin_name);
 	module&		set_input(net* tar_net, bool value);

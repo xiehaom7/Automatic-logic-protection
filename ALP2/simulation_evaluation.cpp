@@ -76,6 +76,19 @@ void simulation_evaluation::run_exhaustive_fault_injection_simulation() {
 	return;
 }
 
+void simulation_evaluation::run_random_fault_injection_simulation(int sim_num, int fault_num) {
+	vector<bool> input_vector(input_num, false);
+	sim->generate_fault_list();
+	sim->inject_faults(0, RESET);
+	while (sim_num > 0) {
+		sim->generate_input_vector(input_vector, RANDOM);
+		sim->run_fault_injection_simulation(fault_num, &input_vector);
+		summarize_fault_injection_results(fault_num);
+		sim_num--;
+	}
+	return;
+}
+
 void simulation_evaluation::run_exhaustive_golden_simulation() {
 	long sim_num = (long)pow((double)2, (double)input_num);
 	long round_num;
@@ -152,7 +165,7 @@ StatNode* simulation_evaluation::get_stat_node(string& node_name) {
 	return vStatNodeList[(*ite).second];
 }
 
-void simulation_evaluation::evaluate_fault_injection_results() {
+double simulation_evaluation::evaluate_fault_injection_results() {
 	vector<StatNode*>::const_iterator c_ite;
 	double ser = 0.0;
 	long error = 0;
@@ -168,5 +181,5 @@ void simulation_evaluation::evaluate_fault_injection_results() {
 	cout << "injection:\t" << injection << endl;
 	cout << "ER:\t\t" << (float)error / injection << endl;
 	cout << "SER:\t\t" << ser << endl;
-	return;
+	return ser;
 }

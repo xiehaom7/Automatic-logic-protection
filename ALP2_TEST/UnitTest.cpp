@@ -945,21 +945,21 @@ namespace ALP2_TEST
 			SignatureNode* tar_node;
 
 			tar_node = sig.get_signature_node(string("top_test.i_0"));
-			Assert::AreEqual((unsigned long)192, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)192, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.i_1"));
-			Assert::AreEqual((unsigned long)160, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)160, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.i_2"));
-			Assert::AreEqual((unsigned long)136, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)136, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.U1.w_0"));
-			Assert::AreEqual((unsigned long)240, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)240, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.U1.w_1"));
-			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.U1.o_0"));
-			Assert::AreEqual((unsigned long)254, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)254, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.U1.o_1"));
-			Assert::AreEqual((unsigned long)128, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)128, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.o_0"));
-			Assert::AreEqual((unsigned long)255, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)255, (tar_node->vODCmask[0] & mask).to_ulong());
 		}
 		TEST_METHOD(test_analyse_observability_2) {
 			stringstream ss_cc("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
@@ -1016,21 +1016,21 @@ namespace ALP2_TEST
 			SignatureNode* tar_node;
 
 			tar_node = sig.get_signature_node(string("top_test.i_0"));
-			Assert::AreEqual((unsigned long)3, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)3, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.i_1"));
-			Assert::AreEqual((unsigned long)5, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)5, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.i_2"));
-			Assert::AreEqual((unsigned long)17, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)17, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.U1.w_0"));
-			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.U1.w_1"));
-			Assert::AreEqual((unsigned long)15, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)15, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.U1.o_0"));
-			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.U1.o_1"));
-			Assert::AreEqual((unsigned long)255, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)255, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.o_0"));
-			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask[0] & mask).to_ulong());
 		}
 		TEST_METHOD(test_analyse_observability_3) {
 			stringstream ss_cc("#AND2_X1\nA1 A2\nZN\n1100\n0010 0001\n"
@@ -1088,21 +1088,21 @@ namespace ALP2_TEST
 			SignatureNode* tar_node;
 
 			tar_node = sig.get_signature_node(string("top_test.i_0"));
-			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.i_1"));
-			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.i_2"));
-			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.U1.w_0"));
-			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.U1.w_1"));
-			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.U1.o_0"));
-			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)0, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.U1.o_1"));
-			Assert::AreEqual((unsigned long)128, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)128, (tar_node->vODCmask[0] & mask).to_ulong());
 			tar_node = sig.get_signature_node(string("top_test.o_0"));
-			Assert::AreEqual((unsigned long)255, (tar_node->vODCmask & mask).to_ulong());
+			Assert::AreEqual((unsigned long)255, (tar_node->vODCmask[0] & mask).to_ulong());
 		}
 	};
 	TEST_CLASS(redundant_wire_test) {

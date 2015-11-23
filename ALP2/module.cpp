@@ -36,8 +36,15 @@ module::~module() {
 }
 
 net*	module::get_net(string net_name) const {
-	map<string, net*>::const_iterator ite = mapNet.find(net_name);
-	return (ite == mapNet.end()) ? NULL : ite->second;
+	size_t index = net_name.find_first_of(".");
+	if (index == string::npos) {
+		map<string, net*>::const_iterator ite = mapNet.find(net_name);
+		return (ite == mapNet.end()) ? NULL : ite->second;
+	}
+	node* driving_node = get_node(net_name.substr(0, index));
+	if (driving_node == NULL)
+		return NULL;
+	return driving_node->get_module_ref()->get_net(net_name.substr(index + 1));
 }
 
 node*	module::get_node(string node_name) const {
@@ -145,12 +152,12 @@ node*	module::_add_node(const string &node_name, const string &node_type, map<st
 	return new_node;
 }
 
-module&	module::add_node(const string &node_name, const string &node_type) {
+node* module::add_node(const string &node_name, const string &node_type) {
 	map<string, module*> map_module;
 	return add_node(node_name, node_type, map_module, pCellLib->map_cell);
 }
 
-module&	module::add_node(const string &node_name, const string &node_type, map<string, module*> &map_module, map<string, cell*> &map_cell) {
+node* module::add_node(const string &node_name, const string &node_type, map<string, module*> &map_module, map<string, cell*> &map_cell) {
 	node* new_node = _add_node(node_name, node_type, map_module, map_cell);
 	if (new_node == NULL)
 		throw exception(("adding node " + node_name +
@@ -164,7 +171,7 @@ module&	module::add_node(const string &node_name, const string &node_type, map<s
 	new_record.op_type = AG;
 	lRecordLst.push_back(new_record);
 
-	return *this;
+	return new_node;
 }
 
 module&	module::add_node_commit(node* tar_node) {
@@ -191,7 +198,7 @@ net*	module::_add_net(const string &net_name) {
 	return new_net;
 }
 
-module&	module::add_net(const string &net_name) {
+net*	module::add_net(const string &net_name) {
 	net* new_net = _add_net(net_name);
 	if (new_net == NULL)
 		throw exception(("adding net " + net_name + " failed. (add_net)").c_str());
@@ -204,7 +211,7 @@ module&	module::add_net(const string &net_name) {
 	new_record.op_type = AW;
 	lRecordLst.push_back(new_record);
 
-	return *this;
+	return new_net;
 }
 
 module&	module::add_net_commit(net* tar_net) {
@@ -701,8 +708,7 @@ bool module::read_module(string buff, map<string, module*> &map_module, map<stri
 				string port_info = sm[3];
 
 				if (gate_type != "module") {
-					node* new_node =
-						add_node(instance_name, gate_type, map_module, map_cell).get_node(instance_name);
+					node* new_node = add_node(instance_name, gate_type, map_module, map_cell);
 
 					vector<string> pin_list;
 					vector<string> wire_list;
