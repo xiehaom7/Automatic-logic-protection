@@ -37,5 +37,6 @@ public:
 	void					summarize_fault_injection_results(int fault_num);
 	StatNode*				get_stat_node(string& node_name);
 	double					evaluate_fault_injection_results();
+	string					save_sim_info();
 };
 

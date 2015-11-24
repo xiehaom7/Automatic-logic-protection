@@ -27,6 +27,10 @@ typedef enum {
 	BACKWARD = 0, DIRECT, INDIRECT_LOW, INDIRECT_HIGH
 }Implicaton_method;
 
+typedef enum {
+	NO_INVERTED_OR_ADDED = 0, INVERTED, ADDED, INVERTED_AND_ADDED
+}Redundant_wire_type;
+
 typedef struct {
 	int							index;
 	Wire_value					val;
@@ -56,9 +60,14 @@ typedef struct {
 	map<string, Implication_comb>	imp_results;
 }Implication_list;
 
+typedef enum {
+	PROTECT = 0, SOURCE_NEG, ADDED_NEG
+}Gate_record_type;
+
 typedef struct {
 	int							gate_index;
-	bitset<SIGNATURE_SIZE>		ODCmask[3];
+	Gate_record_type			type;
+	bitset<SIGNATURE_SIZE>		ODCmask[4];
 	bitset<SIGNATURE_SIZE>		ODCres;
 }Gate_record_item;
 
@@ -138,6 +147,7 @@ private:
 	void						_matrix_generator(Implicaton_method method);
 	int							_generate_implication_vector();
 	void						_execute_op(const Op_item &op, map<string, node*> &mapNode, map<string, net*> &mapNet);
+	void						_parse_op(const Op_item &op, int &inverted, int &added);
 	int							_count_distance(int dest_node_index, int source_node_index);
 
 public:
@@ -156,6 +166,11 @@ public:
 		const bitset<SIGNATURE_SIZE> &observability_to_source,
 		const bitset<SIGNATURE_SIZE> &observability_exclude_target,
 		bitset<SIGNATURE_SIZE> &res);
+	void						calculate_NEG_ODCres(const bitset<SIGNATURE_SIZE> &dest,
+		const bitset<SIGNATURE_SIZE> &observability_to_all,
+		const bitset<SIGNATURE_SIZE> &observability_to_source,
+		const bitset<SIGNATURE_SIZE> &dest_observability_to_all,
+		bitset<SIGNATURE_SIZE> &res);
 	void						calculate_protect(const bitset<SIGNATURE_SIZE> &ODCres,
 		const bitset<SIGNATURE_SIZE> &unprotect,
 		bitset<SIGNATURE_SIZE> &res);
@@ -173,6 +188,7 @@ public:
 		map<int, vector<bitset<SIGNATURE_SIZE>>> &cache_to_source_ob,
 		map<int, vector<bitset<SIGNATURE_SIZE>>> &cache_not_to_dest_ob);
 	bool						redundant_wire_adder(Implication_comb &left_comb, Implication_comb &right_comb);
+	Redundant_wire_type			redundant_wire_type_predict(Implication_comb &left_comb, Implication_comb &right_comb);
 	void						redundant_wire_selector(const string module_name, int rw_num, 
 		int sample_freq, int sim_num, int fault_num);
 	int							implication_counter(Implicaton_method method);

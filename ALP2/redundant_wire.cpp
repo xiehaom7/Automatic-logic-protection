@@ -736,7 +736,7 @@ int redundant_wire::_generate_implication_vector() {
 
 void redundant_wire::setup_observability(vector<bitset<SIGNATURE_SIZE>> &cache_node_ob) {
 	SignatureNode* sig_node;
-	int i;
+	size_t i;
 
 	sig.analyse_observability(0);
 	cache_node_ob.resize(vRWNodeList.size());
@@ -753,7 +753,7 @@ void redundant_wire::setup_to_source_observability(int target,
 	vector<int> exclude_node_list;
 	vector<int> tar_node_list;
 	SignatureNode* sig_node;
-	int i;
+	size_t i;
 
 	tar_node_list.push_back(sig.get_node_index(vRWNodeList[target]->sName));
 	sig.analyse_observability(tar_node_list, exclude_node_list, 1);
@@ -769,7 +769,7 @@ void redundant_wire::setup_not_to_dest_observability(int target,
 	cache_not_to_dest_ob[target].resize(vRWNodeList.size());
 	vector<int> exclude_node_list;
 	SignatureNode* sig_node;
-	int i;
+	size_t i;
 
 	exclude_node_list.push_back(sig.get_node_index(vRWNodeList[target]->sName));
 	sig.analyse_observability(exclude_node_list, 2);
@@ -789,10 +789,11 @@ float redundant_wire::implication_evaluator(Implication_comb left_imp, Implicati
 	float single_node_res;
 	bitset<SIGNATURE_SIZE> v;
 	SignatureNode* sig_left_node;
+	SignatureNode* sig_right_node;
 	set<int>::const_iterator fanin_ite;
 	vector<Gate_record_item>::const_iterator gate_record_ite;
 	int count;
-
+	
 #ifdef DISPLAY
 	cout << "---\t" << vRWNodeList[left_imp.index]->sName << "\t" << left_imp.val << 
 		"\t" << vRWNodeList[right_imp.index]->sName << "\t" << right_imp.val << "\t" << "---" << endl;
@@ -807,13 +808,16 @@ float redundant_wire::implication_evaluator(Implication_comb left_imp, Implicati
 		if (cache_not_to_dest_ob.find(right_imp.index) == cache_not_to_dest_ob.end())
 			setup_not_to_dest_observability(right_imp.index, cache_not_to_dest_ob);
 
+		sig_left_node = sig.get_signature_node(vRWNodeList[left_imp.index]->sName);
+		sig_right_node = sig.get_signature_node(vRWNodeList[right_imp.index]->sName);
+
 		for (fanin_ite = vNodeFaninSet[right_imp.index].cbegin();
 		fanin_ite != vNodeFaninSet[right_imp.index].cend(); fanin_ite++) {
 			if (vRWNodeList[*fanin_ite]->vFanin.empty())
 				continue;
 			Gate_record_item new_item;
-			sig_left_node = sig.get_signature_node(vRWNodeList[left_imp.index]->sName);
 			new_item.gate_index = *fanin_ite;
+			new_item.type = PROTECT;
 			new_item.ODCmask[0] = cache_node_ob[*fanin_ite];
 			new_item.ODCmask[1] = cache_to_source_ob[left_imp.index][*fanin_ite];
 			new_item.ODCmask[2] = cache_not_to_dest_ob[right_imp.index][*fanin_ite];
@@ -825,7 +829,96 @@ float redundant_wire::implication_evaluator(Implication_comb left_imp, Implicati
 			if (new_item.ODCres.count() != 0)
 				vector_gate_record.push_back(new_item);
 		}
+
+		for (fanin_ite = vNodeFaninSet[left_imp.index].cbegin();
+		fanin_ite != vNodeFaninSet[left_imp.index].cend(); fanin_ite++) {
+			if (vRWNodeList[*fanin_ite]->vFanin.empty())
+				continue;
+			Gate_record_item new_item;
+			new_item.gate_index = *fanin_ite;
+			new_item.type = SOURCE_NEG;
+			new_item.ODCmask[0] = cache_node_ob[*fanin_ite];
+			new_item.ODCmask[1] = cache_to_source_ob[left_imp.index][*fanin_ite];
+			new_item.ODCmask[2] = cache_node_ob[right_imp.index];
+			calculate_NEG_ODCres((right_imp.val == ONE) ? ~(sig_right_node->vSig) : sig_right_node->vSig,
+				new_item.ODCmask[0], 
+				new_item.ODCmask[1],
+				new_item.ODCmask[2],
+				new_item.ODCres);
+			if (new_item.ODCres.count() != 0)
+				vector_gate_record.push_back(new_item);
+		}
+
+		if (!vRWNodeList[left_imp.index]->vFanin.empty()) {
+			Gate_record_item new_item;
+			new_item.gate_index = left_imp.index;
+			new_item.type = SOURCE_NEG;
+			new_item.ODCmask[0] = cache_node_ob[left_imp.index];
+			new_item.ODCmask[1].set();
+			new_item.ODCmask[2] = cache_node_ob[right_imp.index];
+			calculate_NEG_ODCres((right_imp.val == ONE) ? ~(sig_right_node->vSig) : sig_right_node->vSig,
+				new_item.ODCmask[0],
+				new_item.ODCmask[1],
+				new_item.ODCmask[2],
+				new_item.ODCres);
+			if (new_item.ODCres.count() != 0)
+				vector_gate_record.push_back(new_item);
+		}
+
+		bool inverted = false;
+		bool added = false;
+
+
+		switch (redundant_wire_type_predict(left_imp, right_imp)) {
+		case NO_INVERTED_OR_ADDED:
+			break;
+		case INVERTED:
+			inverted = true;		
+			break;
+		case ADDED:
+			added = true;
+			break;
+		case INVERTED_AND_ADDED:
+			added = true;
+			inverted = true;
+			break;
+		default:
+			cerr << "Shouldn't be here.";
+		}
+
+		if (inverted) {
+			Gate_record_item new_item;
+			new_item.gate_index = left_imp.index;
+			new_item.type = ADDED_NEG;
+			new_item.ODCmask[0].reset();
+			new_item.ODCmask[1].set();
+			new_item.ODCmask[2] = cache_node_ob[right_imp.index];
+			calculate_NEG_ODCres((right_imp.val == ONE) ? ~(sig_right_node->vSig) : sig_right_node->vSig,
+				new_item.ODCmask[0],
+				new_item.ODCmask[1],
+				new_item.ODCmask[2],
+				new_item.ODCres);
+			if (new_item.ODCres.count() != 0)
+				vector_gate_record.push_back(new_item);
+		}
+
+		if (added) {
+			Gate_record_item new_item;
+			new_item.gate_index = right_imp.index;
+			new_item.type = ADDED_NEG;
+			new_item.ODCmask[0].reset();
+			new_item.ODCmask[1].set();
+			new_item.ODCmask[2] = cache_node_ob[right_imp.index];
+			calculate_NEG_ODCres((left_imp.val == ONE) ? ~(sig_left_node->vSig) : sig_left_node->vSig,
+				new_item.ODCmask[0],
+				new_item.ODCmask[1],
+				new_item.ODCmask[2],
+				new_item.ODCres);
+			if (new_item.ODCres.count() != 0)
+				vector_gate_record.push_back(new_item);
+		}
 	}
+
 	for (gate_record_ite = vector_gate_record.cbegin(); gate_record_ite != vector_gate_record.cend(); gate_record_ite++) {
 		calculate_protect((*gate_record_ite).ODCres,
 			unprotected_sig[(*gate_record_ite).gate_index],
@@ -834,6 +927,7 @@ float redundant_wire::implication_evaluator(Implication_comb left_imp, Implicati
 		count = v.count();
 		if (count != 0) {
 			single_node_res = (float)count / SIGNATURE_SIZE;
+			single_node_res = ((*gate_record_ite).type == PROTECT) ? single_node_res : -single_node_res;
 			res += single_node_res;
 		}
 
@@ -848,6 +942,19 @@ float redundant_wire::implication_evaluator(Implication_comb left_imp, Implicati
 	cout << res << endl;
 #endif
 	return res;
+}
+
+void redundant_wire::calculate_NEG_ODCres(const bitset<SIGNATURE_SIZE> &dest_non_dominant,
+	const bitset<SIGNATURE_SIZE> &observability_to_all,
+	const bitset<SIGNATURE_SIZE> &observability_to_source,
+	const bitset<SIGNATURE_SIZE> &dest_observability_to_all,
+	bitset<SIGNATURE_SIZE> &res) {
+	res.set();
+	res &= observability_to_source;
+	res &= ~(observability_to_all);
+	res &= dest_non_dominant;
+	res &= dest_observability_to_all;
+	return;
 }
 
 void redundant_wire::calculate_ODCres(const bitset<SIGNATURE_SIZE> &source,
@@ -956,6 +1063,86 @@ void	redundant_wire::_execute_op(const Op_item &op, map<string, node*> &mapNode,
 		break;
 	}
 	}
+}
+
+void redundant_wire::_parse_op(const Op_item &op, int &inverted, int &added) {
+	if (op.op == AG && op.op1 == INVERTER_TYPE)
+		inverted++;
+	else if (op.op == AW)
+		added++;
+	return;
+}
+
+Redundant_wire_type redundant_wire::redundant_wire_type_predict(Implication_comb &left_comb, Implication_comb &right_comb) {
+	int source_net_index = left_comb.index;
+	int dest_net_index = right_comb.index;
+	net* source_net = pTopModule->get_net(
+		vRWNodeList[source_net_index]->sName.substr(vRWNodeList[source_net_index]->sName.find_first_of(".") + 1));
+	net* dest_net = pTopModule->get_net(
+		vRWNodeList[dest_net_index]->sName.substr(vRWNodeList[dest_net_index]->sName.find_first_of(".") + 1));
+	map<string, Pin_implication_item*>::const_iterator ite_pin;
+	vector<Op_item>::const_iterator ite_op;
+	int implication_index = 0;
+	cell* cell_ref;
+	string pin_name;
+
+	if (left_comb.val == ONE)	implication_index += 2;
+	if (right_comb.val == ONE)	implication_index += 1;
+
+	int inverted = 0;
+	int added = 0;
+	bool execute_flag = false;
+
+	if (dest_net->get_fanout_num() == 1) {
+		node* dest_driving_node = dest_net->get_fanout_nodes(0);
+		int net_index = dest_driving_node->find_input_net(dest_net);
+		assert(net_index != -1);
+		cell_ref = dest_driving_node->get_cell_ref();
+		pin_name = cell_ref->input_pinlist[net_index];
+		ite_pin = cell_ref->rw_op_collection.find(pin_name);
+		if (ite_pin != cell_ref->rw_op_collection.cend()) {
+			if (ite_pin->second->implication_item_array[implication_index] != NULL) {
+				execute_flag = true;
+				for (ite_op = ite_pin->second->implication_item_array[implication_index]->op_list.cbegin(); 
+				ite_op != ite_pin->second->implication_item_array[implication_index]->op_list.cend(); ite_op++) {
+					_parse_op(*ite_op, inverted, added);
+				}
+			}
+		}
+	}
+	if (!execute_flag) {
+		node* dest_driven_node = dest_net->get_fanin_node();
+		cell_ref = dest_driven_node->get_cell_ref();
+		pin_name = cell_ref->output_pin;
+		ite_pin = cell_ref->rw_op_collection.find(pin_name);
+		if (ite_pin != cell_ref->rw_op_collection.cend()) {
+			if (ite_pin->second->implication_item_array[implication_index] != NULL) {
+				execute_flag = true;
+				for (vector<Op_item>::const_iterator ite_op = ite_pin->second->implication_item_array[implication_index]->op_list.cbegin(); ite_op != ite_pin->second->implication_item_array[implication_index]->op_list.cend(); ite_op++) {
+					_parse_op(*ite_op, inverted, added);
+				}
+			}
+		}
+	}
+	if (!execute_flag) {
+		if (left_comb.val != right_comb.val) {
+			inverted++;
+			added++;
+		}
+		added++;
+	}
+	if (added == 0 && inverted == 0)
+		return NO_INVERTED_OR_ADDED;
+	else if (added == 1 && inverted == 0)
+		return ADDED;
+	else if (added == 1 && inverted == 1)
+		return INVERTED;
+	else if (added == 2 && inverted == 1)
+		return INVERTED_AND_ADDED;
+	else
+		throw exception(("error in predict implication from " + 
+			vRWNodeList[left_comb.index]->sName + " to " + 
+			vRWNodeList[right_comb.index]->sName + ".(redundant_wire::redundant_wire_type_predict)\n").c_str());
 }
 
 bool redundant_wire::redundant_wire_adder(Implication_comb &left_comb, Implication_comb &right_comb) {
@@ -1312,7 +1499,7 @@ int	redundant_wire::implication_counter(Implicaton_method method) {
 		throw exception("unknown implication generate method. (redundant_wire::implication_counter)\n");
 	}
 	int res = 0;
-	for (int i = 0; i < matrixImplication.size(); i++)
+	for (size_t i = 0; i < matrixImplication.size(); i++)
 		if (matrixImplication[i])
 			res++;
 	return res;

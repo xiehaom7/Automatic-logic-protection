@@ -21,7 +21,7 @@ using namespace std;
 
 #ifdef GEN
 int main(int argc, char *argv[]) {
-	/*string target(argv[1]);
+	string target(argv[1]);
 	int num_rw = atoi(argv[2]);
 	int sample_freq = atoi(argv[3]);
 	int sim_num = atoi(argv[4]);
@@ -62,11 +62,9 @@ int main(int argc, char *argv[]) {
 	}
 	cout << endl << "program completed! press any key to quit ..." << endl;
 	getchar();
-	return 0;*/
+	return 0;
 
-	string target(argv[1]);
-	/*string target = "D:\\Dropbox\\Public\\Programs\\C\\results\\s641_original\\s641";
-	int method = 3;*/
+	/*string target(argv[1]);
 
 	srand(time(NULL));
 	cell_library cl("test_lib");
@@ -127,11 +125,12 @@ int main(int argc, char *argv[]) {
 	}
 	cout << endl << "program completed! press any key to quit ..." << endl;
 	getchar();
-	return 0;
+	return 0;*/
 }
 #else
 int main() {
-	string target = "D:\\Dropbox\\Public\\Programs\\C\\results\\s1423_original\\s1423";
+	//string target = "D:\\Dropbox\\Public\\Programs\\C\\results\\s1423_original\\s1423";
+	string target = "D:\\Dropbox\\Public\\Programs\\C\\results\\s298_original_new\\s298";
 	srand(time(NULL));
 	cell_library cl("test_lib");
 	cl.read_cc_file("cell_info_cc.txt");
@@ -170,29 +169,21 @@ int main() {
 	try {
 		start = clock();
 
+		/*ofstream op(target + "_dump.log");
+
+		simulation sim;
+		sim.construct(d.get_top_module());
+		simulation_evaluation se;
+		se.construct(&sim);
+		se.run_random_fault_injection_simulation(5000, 100);
+		se.evaluate_fault_injection_results();
+		op << se.save_sim_info();
+		op.close();*/
+
 		redundant_wire rw;
 		rw.construct(d.get_top_module());
 		rw.implication_matrix_generator_full();
-		rw.redundant_wire_selector(target, 40, 2, 10000, 50);
-
-		//simulation sim;
-		//sim.construct(d.get_top_module());
-		//simulation_evaluation sim_eva;
-		//sim_eva.construct(&sim);
-		//sim_eva.run_exhaustive_fault_injection_simulation();
-		//sim_eva.evaluate_fault_injection_results();
-
-		//cout << "100		10" << endl;
-		//sim_eva.run_random_fault_injection_simulation(100, 10);
-		//sim_eva.evaluate_fault_injection_results();
-
-		//cout << "1000		10" << endl;
-		//sim_eva.run_random_fault_injection_simulation(1000, 10);
-		//sim_eva.evaluate_fault_injection_results();
-
-		//cout << "1000		50" << endl;
-		//sim_eva.run_random_fault_injection_simulation(1000, 50);
-		//sim_eva.evaluate_fault_injection_results();
+		rw.redundant_wire_selector(target, 4, 1, 10000, 50);
 
 		finish = clock();
 		totaltime = (double)(finish - start) / CLOCKS_PER_SEC;

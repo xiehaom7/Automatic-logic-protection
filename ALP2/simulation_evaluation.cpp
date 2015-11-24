@@ -183,3 +183,18 @@ double simulation_evaluation::evaluate_fault_injection_results() {
 	cout << "SER:\t\t" << ser << endl;
 	return ser;
 }
+
+string simulation_evaluation::save_sim_info() {
+	string res;
+
+	for (vector<StatNode*>::iterator ite = vStatNodeList.begin(); ite != vStatNodeList.end(); ite++) {
+		res += (*ite)->sName + "\t" + 
+			to_string((*ite)->uLogicOne) + "\t" + 
+			to_string((*ite)->uLogicZero) + "\t" + 
+			to_string((*ite)->uInjection) + "\t" + 
+			to_string((*ite)->uPropagation) + "\t" + 
+			to_string((*ite)->uSimulation) + "\t" + 
+			to_string((*ite)->uAffection) + "\n";
+	}
+	return res;
+}
