@@ -21,13 +21,13 @@ using namespace std;
 
 #ifdef GEN
 int main(int argc, char *argv[]) {
-	string target(argv[1]);
+	/*string target(argv[1]);
 	int num_rw = atoi(argv[2]);
 	int sample_freq = atoi(argv[3]);
 	int sim_num = atoi(argv[4]);
 	int fault_num = atoi(argv[5]);
 
-	srand(time(NULL));
+	srand(time(null));
 	cell_library cl("test_lib");
 	cl.read_cc_file("cell_info_cc.txt");
 	cl.read_co_file("cell_info_co.txt");
@@ -36,10 +36,10 @@ int main(int argc, char *argv[]) {
 	clock_t start, finish;
 	double totaltime;
 
-	ifstream pFile(target + ".v");
+	ifstream pfile(target + ".v");
 	stringstream ss;
-	assert(pFile.is_open());
-	ss << pFile.rdbuf();
+	assert(pfile.is_open());
+	ss << pfile.rdbuf();
 
 	design d(&cl);
 	d.parse_design_file(ss);
@@ -53,8 +53,8 @@ int main(int argc, char *argv[]) {
 		rw.redundant_wire_selector(target, num_rw, sample_freq, sim_num, fault_num);
 
 		finish = clock();
-		totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
-		cout << "\nRuntime : " << totaltime << "seconds" << endl;
+		totaltime = (double)(finish - start) / clocks_per_sec;
+		cout << "\nruntime : " << totaltime << "seconds" << endl;
 	}
 	catch (exception e)
 	{
@@ -62,9 +62,9 @@ int main(int argc, char *argv[]) {
 	}
 	cout << endl << "program completed! press any key to quit ..." << endl;
 	getchar();
-	return 0;
+	return 0;*/
 
-	/*string target(argv[1]);
+	string target(argv[1]);
 
 	srand(time(NULL));
 	cell_library cl("test_lib");
@@ -84,6 +84,8 @@ int main(int argc, char *argv[]) {
 	design d(&cl);
 	d.parse_design_file(ss);
 
+	ofstream pOFile(target + "_implication_counter.log");
+
 	try {
 		redundant_wire rw_0, rw_1, rw_2, rw_3;
 		rw_0.construct(d.get_top_module());
@@ -93,31 +95,31 @@ int main(int argc, char *argv[]) {
 
 		start = clock();	
 		total = rw_0.implication_counter(BACKWARD);
-		cout << "implication number: " << total << endl;
+		pOFile << "implication number: " << total << endl;
 		finish = clock();
 		totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
-		cout << "\nRuntime : " << totaltime << "seconds" << endl;
+		pOFile << "Runtime : " << totaltime << "seconds" << endl << endl;
 
 		start = clock();
 		total = rw_1.implication_counter(DIRECT);
-		cout << "implication number: " << total << endl;
+		pOFile << "implication number: " << total << endl;
 		finish = clock();
 		totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
-		cout << "\nRuntime : " << totaltime << "seconds" << endl;
+		pOFile << "Runtime : " << totaltime << "seconds" << endl << endl;
 
 		start = clock();
 		total = rw_2.implication_counter(INDIRECT_LOW);
-		cout << "implication number: " << total << endl;
+		pOFile << "implication number: " << total << endl;
 		finish = clock();
 		totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
-		cout << "\nRuntime : " << totaltime << "seconds" << endl;
+		pOFile << "Runtime : " << totaltime << "seconds" << endl << endl;
 
 		start = clock();
 		total = rw_3.implication_counter(INDIRECT_HIGH);
-		cout << "implication number: " << total << endl;
+		pOFile << "implication number: " << total << endl;
 		finish = clock();
 		totaltime = (double)(finish - start) / CLOCKS_PER_SEC;
-		cout << "\nRuntime : " << totaltime << "seconds" << endl;
+		pOFile << "Runtime : " << totaltime << "seconds" << endl << endl;
 	}
 	catch (exception e)
 	{
@@ -125,7 +127,7 @@ int main(int argc, char *argv[]) {
 	}
 	cout << endl << "program completed! press any key to quit ..." << endl;
 	getchar();
-	return 0;*/
+	return 0;
 }
 #else
 int main() {

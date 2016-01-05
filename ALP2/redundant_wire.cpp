@@ -1498,9 +1498,27 @@ int	redundant_wire::implication_counter(Implicaton_method method) {
 	default:
 		throw exception("unknown implication generate method. (redundant_wire::implication_counter)\n");
 	}
+
+	size_t size = vRWNodeList.size();
+	size_t i, j;
+	int index;
 	int res = 0;
-	for (size_t i = 0; i < matrixImplication.size(); i++)
-		if (matrixImplication[i])
-			res++;
+
+	for (i = 0; i < size; i++) {
+		for (j = 0; j < size; j++) {
+			if (vNodeFanoutSet[i].find(j) != vNodeFanoutSet[i].end() || i == j)
+				continue;
+			index = i * 2;
+			if (matrixImplication[index * size * 2 + j * 2])
+				res++;
+			else if (matrixImplication[index * size * 2 + j * 2 + 1])
+				res++;
+			index = i * 2 + 1;
+			if (matrixImplication[index * size * 2 + j * 2])
+				res++;
+			else if (matrixImplication[index * size * 2 + j * 2 + 1])
+				res++;
+		}
+	}
 	return res;
 }
